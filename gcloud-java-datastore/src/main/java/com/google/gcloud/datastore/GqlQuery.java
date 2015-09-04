@@ -373,12 +373,12 @@ public final class GqlQuery<V> extends Query<V> {
   protected com.google.datastore.v1beta3.GqlQuery toPb() {
     com.google.datastore.v1beta3.GqlQuery.Builder queryPb = com.google.datastore.v1beta3.GqlQuery.newBuilder();
     queryPb.setQueryString(queryString);
-    queryPb.setAllowLiteral(allowLiteral);
+    queryPb.setAllowLiterals(allowLiteral);
     for (Binding argument : namedBindings) {
-      queryPb.addNameArg(argument.toPb());
+      queryPb.addNamedBindings(argument.toPb());
     }
     for (Binding argument : positionalBindings) {
-      queryPb.addNumberArg(argument.toPb());
+      queryPb.addPositionalBindings(argument.toPb());
     }
     return queryPb.build();
   }
@@ -404,14 +404,14 @@ public final class GqlQuery<V> extends Query<V> {
       ResultType<V> resultType, String ns, com.google.datastore.v1beta3.GqlQuery queryPb) {
     Builder<V> builder = new Builder<>(resultType, queryPb.getQueryString());
     builder.namespace(ns);
-    if (queryPb.hasAllowLiteral()) {
-      builder.allowLiteral = queryPb.getAllowLiteral();
+    if (queryPb.hasAllowLiterals()) {
+      builder.allowLiteral = queryPb.getAllowLiterals();
     }
-    for (com.google.datastore.v1beta3.GqlQueryArg nameArg : queryPb.getNameArgList()) {
+    for (com.google.datastore.v1beta3.GqlQueryArg nameArg : queryPb.getNamedBindings()) {
       Binding argument = Binding.fromPb(nameArg);
       builder.namedBindings.put(argument.name(), argument);
     }
-    for (com.google.datastore.v1beta3.GqlQueryArg numberArg : queryPb.getNumberArgList()) {
+    for (com.google.datastore.v1beta3.GqlQueryArg numberArg : queryPb.getPositionalBindingsList()) {
       Binding argument = Binding.fromPb(numberArg);
       builder.positionalBindings.add(argument);
     }
