@@ -122,11 +122,11 @@ public class StructuredQuery<V> extends Query<V> {
     enum Operator {
       AND;
 
-      com.google.datastore.v1beta3.CompositeFilter.Operator toPb() {
-        return com.google.datastore.v1beta3.CompositeFilter.Operator.valueOf(name());
+      com.google.datastore.v1beta3.CompositeFilter.Op toPb() {
+        return com.google.datastore.v1beta3.CompositeFilter.Op.valueOf(name());
       }
 
-      static Operator fromPb(com.google.datastore.v1beta3.CompositeFilter.Operator operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.CompositeFilter.Op operatorPb) {
         return valueOf(operatorPb.name());
       }
     }
@@ -170,7 +170,7 @@ public class StructuredQuery<V> extends Query<V> {
     }
 
     static CompositeFilter fromPb(com.google.datastore.v1beta3.CompositeFilter compositeFilterPb) {
-      Operator operator = Operator.fromPb(compositeFilterPb.getOperator());
+      Operator operator = Operator.fromPb(compositeFilterPb.getOp());
       ImmutableList.Builder<Filter> filters = ImmutableList.builder();
       for (com.google.datastore.v1beta3.Filter filterPb : compositeFilterPb.getFilterList()) {
         filters.add(Filter.fromPb(filterPb));
@@ -186,7 +186,7 @@ public class StructuredQuery<V> extends Query<V> {
     protected com.google.datastore.v1beta3.Filter toPb() {
       com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
       com.google.datastore.v1beta3.CompositeFilter.Builder compositeFilterPb = filterPb.getCompositeFilterBuilder();
-      compositeFilterPb.setOperator(operator.toPb());
+      compositeFilterPb.setOp(operator.toPb());
       for (Filter filter : filters) {
         compositeFilterPb.addFilter(filter.toPb());
       }
@@ -211,10 +211,10 @@ public class StructuredQuery<V> extends Query<V> {
       HAS_ANCESTOR;
 
       com.google.datastore.v1beta3.PropertyFilter.Operator toPb() {
-        return com.google.datastore.v1beta3.PropertyFilter.Operator.valueOf(name());
+        return com.google.datastore.v1beta3.PropertyFilter.Op.valueOf(name());
       }
 
-      static Operator fromPb(com.google.datastore.v1beta3.PropertyFilter.Operator operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.PropertyFilter.Op operatorPb) {
         return valueOf(operatorPb.name());
       }
     }
@@ -227,7 +227,7 @@ public class StructuredQuery<V> extends Query<V> {
 
     public static PropertyFilter fromPb(com.google.datastore.v1beta3.PropertyFilter propertyFilterPb) {
       String property = propertyFilterPb.getProperty().getName();
-      Operator operator = Operator.fromPb(propertyFilterPb.getOperator());
+      Operator operator = Operator.fromPb(propertyFilterPb.getOp());
       Value<?> value = Value.fromPb(propertyFilterPb.getValue());
       return new PropertyFilter(property, operator, value);
     }
@@ -433,7 +433,7 @@ public class StructuredQuery<V> extends Query<V> {
       com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
       com.google.datastore.v1beta3.PropertyFilter.Builder propertyFilterPb = filterPb.getPropertyFilterBuilder();
       propertyFilterPb.getPropertyBuilder().setName(property);
-      propertyFilterPb.setOperator(operator.toPb());
+      propertyFilterPb.setOp(operator.toPb());
       if (value != null) {
         propertyFilterPb.setValue(value.toPb());
       }
