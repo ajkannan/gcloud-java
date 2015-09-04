@@ -19,8 +19,8 @@ package com.google.gcloud.datastore;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-import com.google.api.services.datastore.DatastoreV1;
-import com.google.api.services.datastore.DatastoreV1.Value;
+
+import com.google.datastore.v1beta3.Value;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -37,7 +37,7 @@ import java.net.URLEncoder;
  * A Google Cloud Datastore cursor.
  * The cursor can be used to as a starting point or an ending point for a {@link Query}
  */
-public final class Cursor extends Serializable<DatastoreV1.Value> {
+public final class Cursor extends Serializable<com.google.datastore.v1beta3.Value> {
 
   private static final long serialVersionUID = -1423744878777486541L;
 
@@ -89,7 +89,7 @@ public final class Cursor extends Serializable<DatastoreV1.Value> {
   public static Cursor fromUrlSafe(String urlSafe) {
     try {
       String utf8Str = URLDecoder.decode(urlSafe, UTF_8.name());
-      DatastoreV1.Value.Builder builder = DatastoreV1.Value.newBuilder();
+      com.google.datastore.v1beta3.Value.Builder builder = com.google.datastore.v1beta3.Value.newBuilder();
       TextFormat.merge(utf8Str, builder);
       return fromPb(builder.build());
     } catch (UnsupportedEncodingException | ParseException e) {
@@ -103,15 +103,15 @@ public final class Cursor extends Serializable<DatastoreV1.Value> {
 
   @Override
   protected Value toPb() {
-    return DatastoreV1.Value.newBuilder().setBlobValue(byteString).build();
+    return com.google.datastore.v1beta3.Value.newBuilder().setBlobValue(byteString).build();
   }
 
   @Override
   protected Object fromPb(byte[] bytesPb) throws InvalidProtocolBufferException {
-    return fromPb(DatastoreV1.Value.parseFrom(bytesPb));
+    return fromPb(com.google.datastore.v1beta3.Value.parseFrom(bytesPb));
   }
 
-  static Cursor fromPb(DatastoreV1.Value valuePb) {
+  static Cursor fromPb(com.google.datastore.v1beta3.Value valuePb) {
     return new Cursor(valuePb.getBlobValue());
   }
 }

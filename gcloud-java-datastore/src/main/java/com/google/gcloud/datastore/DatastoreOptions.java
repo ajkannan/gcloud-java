@@ -18,9 +18,9 @@ package com.google.gcloud.datastore;
 
 import static com.google.gcloud.datastore.Validator.validateNamespace;
 
-import com.google.api.services.datastore.DatastoreV1;
-import com.google.api.services.datastore.DatastoreV1.EntityResult;
-import com.google.api.services.datastore.DatastoreV1.LookupResponse;
+
+import com.google.datastore.v1beta3.EntityResult;
+import com.google.datastore.v1beta3.LookupResponse;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.gcloud.ServiceOptions;
@@ -102,9 +102,9 @@ public class DatastoreOptions extends ServiceOptions<DatastoreRpc, DatastoreOpti
     Builder builder = toBuilder();
     builder.normalizeDataset(false);
     // Replace provided project-id with full project-id (s~xxx, e~xxx,...)
-    DatastoreV1.LookupRequest.Builder requestPb = DatastoreV1.LookupRequest.newBuilder();
-    DatastoreV1.Key key = DatastoreV1.Key.newBuilder()
-        .addPathElement(DatastoreV1.Key.PathElement.newBuilder().setKind("__foo__").setName("bar"))
+    com.google.datastore.v1beta3.LookupRequest.Builder requestPb = com.google.datastore.v1beta3.LookupRequest.newBuilder();
+    com.google.datastore.v1beta3.Key key = com.google.datastore.v1beta3.Key.newBuilder()
+        .addPathElement(com.google.datastore.v1beta3.Key.PathElement.newBuilder().setKind("__foo__").setName("bar"))
         .build();
     requestPb.addKey(key);
     try {

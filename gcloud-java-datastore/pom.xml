@@ -13,6 +13,16 @@
     <artifactId>gcloud-java-pom</artifactId>
     <version>0.0.8-SNAPSHOT</version>
   </parent>
+  <repositories>
+    <repository>
+      <id>sonatype-snapshots</id>
+      <name>sonatype-snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -22,13 +32,8 @@
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-datastore-protobuf</artifactId>
-      <version>v1beta2-rev1-2.1.2</version>
+      <version>v1beta3-0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.google.apis</groupId>
-      <artifactId>google-api-services-datastore</artifactId>
-      <version>v1beta2-rev23-1.19.0</version>
     </dependency>
     <dependency>
       <groupId>junit</groupId>

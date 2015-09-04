@@ -16,7 +16,7 @@
 
 package com.google.gcloud.datastore;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.common.collect.ImmutableMap;
 
 import java.io.Serializable;
@@ -55,16 +55,16 @@ public abstract class TransactionOption implements Serializable {
 
     public enum Level {
 
-      SERIALIZABLE(DatastoreV1.BeginTransactionRequest.IsolationLevel.SERIALIZABLE),
-      SNAPSHOT(DatastoreV1.BeginTransactionRequest.IsolationLevel.SNAPSHOT);
+      SERIALIZABLE(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel.SERIALIZABLE),
+      SNAPSHOT(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel.SNAPSHOT);
 
-      private final DatastoreV1.BeginTransactionRequest.IsolationLevel levelPb;
+      private final com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel levelPb;
 
-      Level(DatastoreV1.BeginTransactionRequest.IsolationLevel levelPb) {
+      Level(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel levelPb) {
         this.levelPb = levelPb;
       }
 
-      DatastoreV1.BeginTransactionRequest.IsolationLevel toPb() {
+      com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel toPb() {
         return levelPb;
       }
     }

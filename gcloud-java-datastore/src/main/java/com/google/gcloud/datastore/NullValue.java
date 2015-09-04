@@ -18,7 +18,7 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 
 public final class NullValue extends Value<Void> {
 
@@ -40,12 +40,12 @@ public final class NullValue extends Value<Void> {
         }
 
         @Override
-        protected Void getValue(DatastoreV1.Value from) {
+        protected Void getValue(com.google.datastore.v1beta3.Value from) {
           return null;
         }
 
         @Override
-        protected void setValue(NullValue from, DatastoreV1.Value.Builder to) {
+        protected void setValue(NullValue from, com.google.datastore.v1beta3.Value.Builder to) {
           // nothing to set
         }
       };

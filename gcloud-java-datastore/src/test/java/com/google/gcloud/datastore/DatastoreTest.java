@@ -25,8 +25,8 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import com.google.api.services.datastore.DatastoreV1;
-import com.google.api.services.datastore.DatastoreV1.EntityResult;
+
+import com.google.datastore.v1beta3.EntityResult;
 import com.google.common.collect.Iterators;
 import com.google.gcloud.RetryParams;
 import com.google.gcloud.datastore.Query.ResultType;
@@ -636,9 +636,9 @@ public class DatastoreTest {
 
   @Test
   public void testRetires() throws Exception {
-    DatastoreV1.LookupRequest requestPb =
-        DatastoreV1.LookupRequest.newBuilder().addKey(KEY1.toPb()).build();
-    DatastoreV1.LookupResponse responsePb = DatastoreV1.LookupResponse.newBuilder()
+    com.google.datastore.v1beta3.LookupRequest requestPb =
+        com.google.datastore.v1beta3.LookupRequest.newBuilder().addKey(KEY1.toPb()).build();
+    com.google.datastore.v1beta3.LookupResponse responsePb = com.google.datastore.v1beta3.LookupResponse.newBuilder()
         .addFound(EntityResult.newBuilder().setEntity(ENTITY1.toPb())).build();
     DatastoreRpcFactory rpcFactoryMock = EasyMock.createStrictMock(DatastoreRpcFactory.class);
     DatastoreRpc rpcMock = EasyMock.createStrictMock(DatastoreRpc.class);

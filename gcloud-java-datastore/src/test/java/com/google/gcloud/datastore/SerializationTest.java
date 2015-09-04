@@ -20,7 +20,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.gcloud.AuthCredentials;
@@ -90,7 +90,7 @@ public class SerializationTest {
   private static final DateTimeValue DATE_AND_TIME_VALUE = DateTimeValue.of(DateTime.now());
   private static final BlobValue BLOB_VALUE = BlobValue.of(BLOB1);
   private static final RawValue RAW_VALUE = RawValue.of(
-      DatastoreV1.Value.newBuilder().setBlobKeyValue("blob-key").setMeaning(18).build());
+      com.google.datastore.v1beta3.Value.newBuilder().setBlobKeyValue("blob-key").setMeaning(18).build());
   private static final Entity ENTITY1 = Entity.builder(KEY1).build();
   private static final Entity ENTITY2 =
       Entity.builder(KEY2).set("null", NullValue.of()).build();

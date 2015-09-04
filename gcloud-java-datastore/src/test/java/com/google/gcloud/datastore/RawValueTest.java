@@ -20,13 +20,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 
 import org.junit.Test;
 
 public class RawValueTest {
 
-  private static final DatastoreV1.Value CONTENT = StringValue.of("hello").toPb();
+  private static final com.google.datastore.v1beta3.Value CONTENT = StringValue.of("hello").toPb();
 
   @Test
   public void testToBuilder() throws Exception {

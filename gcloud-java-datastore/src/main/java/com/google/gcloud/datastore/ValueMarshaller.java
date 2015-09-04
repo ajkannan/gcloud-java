@@ -16,7 +16,7 @@
 
 package com.google.gcloud.datastore;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 
 /**
  * A common interface for Value marshallers.
@@ -24,9 +24,9 @@ import com.google.api.services.datastore.DatastoreV1;
 interface ValueMarshaller<V, P extends Value<V>, B extends ValueBuilder<V, P, B>>
     extends java.io.Serializable {
 
-  B fromProto(DatastoreV1.Value proto);
+  B fromProto(com.google.datastore.v1beta3.Value proto);
 
-  DatastoreV1.Value toProto(P value);
+  com.google.datastore.v1beta3.Value toProto(P value);
 
   int getProtoFieldId();
 }

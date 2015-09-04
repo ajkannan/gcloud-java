@@ -16,7 +16,7 @@
 
 package com.google.gcloud.datastore;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -199,8 +199,8 @@ public abstract class BaseDatastoreBatchWriter implements DatastoreBatchWriter {
     return DatastoreException.throwInvalidRequest(String.format(msg, params));
   }
 
-  protected DatastoreV1.Mutation.Builder toMutationPb() {
-    DatastoreV1.Mutation.Builder mutationPb = DatastoreV1.Mutation.newBuilder();
+  protected com.google.datastore.v1beta3.Mutation.Builder toMutationPb() {
+    com.google.datastore.v1beta3.Mutation.Builder mutationPb = com.google.datastore.v1beta3.Mutation.newBuilder();
     for (FullEntity<IncompleteKey> entity : toAddAutoId()) {
       mutationPb.addInsertAutoId(entity.toPb());
     }

@@ -25,7 +25,7 @@ import static com.google.gcloud.datastore.KeyValue.of;
 import static com.google.gcloud.datastore.LongValue.of;
 import static com.google.gcloud.datastore.StringValue.of;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -103,9 +103,9 @@ public class StructuredQuery<V> extends Query<V> {
     Filter() {
     }
 
-    protected abstract DatastoreV1.Filter toPb();
+    protected abstract com.google.datastore.v1beta3.Filter toPb();
 
-    static Filter fromPb(DatastoreV1.Filter filterPb) {
+    static Filter fromPb(com.google.datastore.v1beta3.Filter filterPb) {
       if (filterPb.hasCompositeFilter()) {
         return CompositeFilter.fromPb(filterPb.getCompositeFilter());
       }
@@ -122,11 +122,11 @@ public class StructuredQuery<V> extends Query<V> {
     enum Operator {
       AND;
 
-      DatastoreV1.CompositeFilter.Operator toPb() {
-        return DatastoreV1.CompositeFilter.Operator.valueOf(name());
+      com.google.datastore.v1beta3.CompositeFilter.Operator toPb() {
+        return com.google.datastore.v1beta3.CompositeFilter.Operator.valueOf(name());
       }
 
-      static Operator fromPb(DatastoreV1.CompositeFilter.Operator operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.CompositeFilter.Operator operatorPb) {
         return valueOf(operatorPb.name());
       }
     }
@@ -169,10 +169,10 @@ public class StructuredQuery<V> extends Query<V> {
           && filters.equals(other.filters);
     }
 
-    static CompositeFilter fromPb(DatastoreV1.CompositeFilter compositeFilterPb) {
+    static CompositeFilter fromPb(com.google.datastore.v1beta3.CompositeFilter compositeFilterPb) {
       Operator operator = Operator.fromPb(compositeFilterPb.getOperator());
       ImmutableList.Builder<Filter> filters = ImmutableList.builder();
-      for (DatastoreV1.Filter filterPb : compositeFilterPb.getFilterList()) {
+      for (com.google.datastore.v1beta3.Filter filterPb : compositeFilterPb.getFilterList()) {
         filters.add(Filter.fromPb(filterPb));
       }
       return new CompositeFilter(operator, filters.build());
@@ -183,9 +183,9 @@ public class StructuredQuery<V> extends Query<V> {
     }
 
     @Override
-    protected DatastoreV1.Filter toPb() {
-      DatastoreV1.Filter.Builder filterPb = DatastoreV1.Filter.newBuilder();
-      DatastoreV1.CompositeFilter.Builder compositeFilterPb = filterPb.getCompositeFilterBuilder();
+    protected com.google.datastore.v1beta3.Filter toPb() {
+      com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
+      com.google.datastore.v1beta3.CompositeFilter.Builder compositeFilterPb = filterPb.getCompositeFilterBuilder();
       compositeFilterPb.setOperator(operator.toPb());
       for (Filter filter : filters) {
         compositeFilterPb.addFilter(filter.toPb());
@@ -210,11 +210,11 @@ public class StructuredQuery<V> extends Query<V> {
       EQUAL,
       HAS_ANCESTOR;
 
-      DatastoreV1.PropertyFilter.Operator toPb() {
-        return DatastoreV1.PropertyFilter.Operator.valueOf(name());
+      com.google.datastore.v1beta3.PropertyFilter.Operator toPb() {
+        return com.google.datastore.v1beta3.PropertyFilter.Operator.valueOf(name());
       }
 
-      static Operator fromPb(DatastoreV1.PropertyFilter.Operator operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.PropertyFilter.Operator operatorPb) {
         return valueOf(operatorPb.name());
       }
     }
@@ -225,7 +225,7 @@ public class StructuredQuery<V> extends Query<V> {
       this.value = checkNotNull(value);
     }
 
-    public static PropertyFilter fromPb(DatastoreV1.PropertyFilter propertyFilterPb) {
+    public static PropertyFilter fromPb(com.google.datastore.v1beta3.PropertyFilter propertyFilterPb) {
       String property = propertyFilterPb.getProperty().getName();
       Operator operator = Operator.fromPb(propertyFilterPb.getOperator());
       Value<?> value = Value.fromPb(propertyFilterPb.getValue());
@@ -429,9 +429,9 @@ public class StructuredQuery<V> extends Query<V> {
     }
 
     @Override
-    protected DatastoreV1.Filter toPb() {
-      DatastoreV1.Filter.Builder filterPb = DatastoreV1.Filter.newBuilder();
-      DatastoreV1.PropertyFilter.Builder propertyFilterPb = filterPb.getPropertyFilterBuilder();
+    protected com.google.datastore.v1beta3.Filter toPb() {
+      com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
+      com.google.datastore.v1beta3.PropertyFilter.Builder propertyFilterPb = filterPb.getPropertyFilterBuilder();
       propertyFilterPb.getPropertyBuilder().setName(property);
       propertyFilterPb.setOperator(operator.toPb());
       if (value != null) {
@@ -452,11 +452,11 @@ public class StructuredQuery<V> extends Query<V> {
 
       ASCENDING, DESCENDING;
 
-      DatastoreV1.PropertyOrder.Direction toPb() {
-        return DatastoreV1.PropertyOrder.Direction.valueOf(name());
+      com.google.datastore.v1beta3.PropertyOrder.Direction toPb() {
+        return com.google.datastore.v1beta3.PropertyOrder.Direction.valueOf(name());
       }
 
-      static Direction fromPb(DatastoreV1.PropertyOrder.Direction directionPb) {
+      static Direction fromPb(com.google.datastore.v1beta3.PropertyOrder.Direction directionPb) {
         return valueOf(directionPb.name());
       }
     }
@@ -492,10 +492,10 @@ public class StructuredQuery<V> extends Query<V> {
       return direction;
     }
 
-    DatastoreV1.PropertyOrder toPb() {
-      return DatastoreV1.PropertyOrder.newBuilder()
+    com.google.datastore.v1beta3.PropertyOrder toPb() {
+      return com.google.datastore.v1beta3.PropertyOrder.newBuilder()
           .setDirection(direction.toPb())
-          .setProperty(DatastoreV1.PropertyReference.newBuilder().setName(property).build())
+          .setProperty(com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(property).build())
           .build();
     }
 
@@ -507,7 +507,7 @@ public class StructuredQuery<V> extends Query<V> {
       return new OrderBy(property, OrderBy.Direction.DESCENDING);
     }
 
-    static OrderBy fromPb(DatastoreV1.PropertyOrder propertyOrderPb) {
+    static OrderBy fromPb(com.google.datastore.v1beta3.PropertyOrder propertyOrderPb) {
       String property = propertyOrderPb.getProperty().getName();
       Direction direction = Direction.fromPb(propertyOrderPb.getDirection());
       return new OrderBy(property, direction);
@@ -525,11 +525,11 @@ public class StructuredQuery<V> extends Query<V> {
 
       FIRST;
 
-      DatastoreV1.PropertyExpression.AggregationFunction toPb() {
-        return DatastoreV1.PropertyExpression.AggregationFunction.valueOf(name());
+      com.google.datastore.v1beta3.PropertyExpression.AggregationFunction toPb() {
+        return com.google.datastore.v1beta3.PropertyExpression.AggregationFunction.valueOf(name());
       }
 
-      static Aggregate fromPb(DatastoreV1.PropertyExpression.AggregationFunction aggregatePb) {
+      static Aggregate fromPb(com.google.datastore.v1beta3.PropertyExpression.AggregationFunction aggregatePb) {
         return valueOf(aggregatePb.name());
       }
     }
@@ -567,18 +567,18 @@ public class StructuredQuery<V> extends Query<V> {
       return toStringHelper.toString();
     }
 
-    DatastoreV1.PropertyExpression toPb() {
-      DatastoreV1.PropertyExpression.Builder expressionPb =
-          DatastoreV1.PropertyExpression.newBuilder();
+    com.google.datastore.v1beta3.PropertyExpression toPb() {
+      com.google.datastore.v1beta3.PropertyExpression.Builder expressionPb =
+          com.google.datastore.v1beta3.PropertyExpression.newBuilder();
       if (aggregate != null) {
         expressionPb.setAggregationFunction(aggregate.toPb());
       }
       expressionPb.setProperty(
-          DatastoreV1.PropertyReference.newBuilder().setName(property).build());
+          com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(property).build());
       return expressionPb.build();
     }
 
-    public static Projection fromPb(DatastoreV1.PropertyExpression propertyExpressionPb) {
+    public static Projection fromPb(com.google.datastore.v1beta3.PropertyExpression propertyExpressionPb) {
       String property = propertyExpressionPb.getProperty().getName();
       Aggregate aggregate = null;
       if (propertyExpressionPb.hasAggregationFunction()) {
@@ -711,7 +711,7 @@ public class StructuredQuery<V> extends Query<V> {
       return self();
     }
 
-    B mergeFrom(DatastoreV1.Query queryPb) {
+    B mergeFrom(com.google.datastore.v1beta3.Query queryPb) {
       if (queryPb.getKindCount() > 0) {
         kind(queryPb.getKind(0).getName());
       }
@@ -730,13 +730,13 @@ public class StructuredQuery<V> extends Query<V> {
       if (queryPb.hasFilter()) {
         filter(Filter.fromPb(queryPb.getFilter()));
       }
-      for (DatastoreV1.PropertyOrder orderByPb : queryPb.getOrderList()) {
+      for (com.google.datastore.v1beta3.PropertyOrder orderByPb : queryPb.getOrderList()) {
         addOrderBy(OrderBy.fromPb(orderByPb));
       }
-      for (DatastoreV1.PropertyExpression projectionPb : queryPb.getProjectionList()) {
+      for (com.google.datastore.v1beta3.PropertyExpression projectionPb : queryPb.getProjectionList()) {
         addProjection(Projection.fromPb(projectionPb));
       }
-      for (DatastoreV1.PropertyReference groupByPb : queryPb.getGroupByList()) {
+      for (com.google.datastore.v1beta3.PropertyReference groupByPb : queryPb.getGroupByList()) {
         addGroupBy(groupByPb.getName());
       }
       return self();
@@ -774,7 +774,7 @@ public class StructuredQuery<V> extends Query<V> {
     }
 
     @Override
-    protected KeyQueryBuilder mergeFrom(DatastoreV1.Query queryPb) {
+    protected KeyQueryBuilder mergeFrom(com.google.datastore.v1beta3.Query queryPb) {
       super.mergeFrom(queryPb);
       projection(Projection.property(KEY_PROPERTY_NAME));
       clearGroupBy();
@@ -912,12 +912,12 @@ public class StructuredQuery<V> extends Query<V> {
   }
 
   @Override
-  protected void populatePb(DatastoreV1.RunQueryRequest.Builder requestPb) {
+  protected void populatePb(com.google.datastore.v1beta3.RunQueryRequest.Builder requestPb) {
     requestPb.setQuery(toPb());
   }
 
   @Override
-  protected StructuredQuery<V> nextQuery(DatastoreV1.QueryResultBatch responsePb) {
+  protected StructuredQuery<V> nextQuery(com.google.datastore.v1beta3.QueryResultBatch responsePb) {
     Builder<V> builder = new Builder<>(type());
     builder.mergeFrom(toPb());
     builder.startCursor(new Cursor(responsePb.getEndCursor()));
@@ -933,8 +933,8 @@ public class StructuredQuery<V> extends Query<V> {
   }
 
   @Override
-  protected DatastoreV1.Query toPb() {
-    DatastoreV1.Query.Builder queryPb = DatastoreV1.Query.newBuilder();
+  protected com.google.datastore.v1beta3.Query toPb() {
+    com.google.datastore.v1beta3.Query.Builder queryPb = com.google.datastore.v1beta3.Query.newBuilder();
     if (kind != null) {
       queryPb.addKindBuilder().setName(kind);
     }
@@ -957,7 +957,7 @@ public class StructuredQuery<V> extends Query<V> {
       queryPb.addOrder(value.toPb());
     }
     for (String value : groupBy) {
-      queryPb.addGroupBy(DatastoreV1.PropertyReference.newBuilder().setName(value).build());
+      queryPb.addGroupBy(com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(value).build());
     }
     for (Projection value : projection) {
       queryPb.addProjection(value.toPb());
@@ -968,11 +968,11 @@ public class StructuredQuery<V> extends Query<V> {
   @Override
   protected Object fromPb(ResultType<V> resultType, String namespace, byte[] bytesPb)
       throws InvalidProtocolBufferException {
-    return fromPb(resultType, namespace, DatastoreV1.Query.parseFrom(bytesPb));
+    return fromPb(resultType, namespace, com.google.datastore.v1beta3.Query.parseFrom(bytesPb));
   }
 
   private static StructuredQuery<?> fromPb(ResultType<?> resultType, String namespace,
-      DatastoreV1.Query queryPb) {
+      com.google.datastore.v1beta3.Query queryPb) {
     BaseBuilder<?, ?> builder;
     if (resultType.equals(ResultType.ENTITY)) {
       builder = new EntityQueryBuilder();

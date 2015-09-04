@@ -16,9 +16,9 @@
 
 package com.google.gcloud.datastore;
 
-import static com.google.api.services.datastore.DatastoreV1.Value.LIST_VALUE_FIELD_NUMBER;
+import static com.google.datastore.v1beta3.Value.LIST_VALUE_FIELD_NUMBER;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
@@ -45,16 +45,16 @@ public final class ListValue extends Value<List<? extends Value<?>>> {
         }
 
         @Override
-        protected List<Value<?>> getValue(DatastoreV1.Value from) {
+        protected List<Value<?>> getValue(com.google.datastore.v1beta3.Value from) {
           List<Value<?>> properties = new ArrayList<>(from.getListValueCount());
-          for (DatastoreV1.Value valuePb : from.getListValueList()) {
+          for (com.google.datastore.v1beta3.Value valuePb : from.getListValueList()) {
             properties.add(Value.fromPb(valuePb));
           }
           return properties;
         }
 
         @Override
-        protected void setValue(ListValue from, DatastoreV1.Value.Builder to) {
+        protected void setValue(ListValue from, com.google.datastore.v1beta3.Value.Builder to) {
           for (Value<?> property : from.get()) {
             to.addListValue(property.toPb());
           }

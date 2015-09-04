@@ -18,7 +18,7 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.api.services.datastore.DatastoreV1;
+
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -33,7 +33,7 @@ import java.util.Objects;
  *
  * @param <V> the type of the content for this value
  */
-public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
+public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3.Value> {
 
   private static final long serialVersionUID = -1899638277588872742L;
 
@@ -55,7 +55,7 @@ public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public final B fromProto(DatastoreV1.Value proto) {
+    public final B fromProto(com.google.datastore.v1beta3.Value proto) {
       B builder = newBuilder(getValue(proto));
       if (proto.hasIndexed()) {
         builder.indexed(proto.getIndexed());
@@ -68,8 +68,8 @@ public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
 
     @SuppressWarnings("deprecation")
     @Override
-    public final DatastoreV1.Value toProto(P value) {
-      DatastoreV1.Value.Builder builder = DatastoreV1.Value.newBuilder();
+    public final com.google.datastore.v1beta3.Value toProto(P value) {
+      com.google.datastore.v1beta3.Value.Builder builder = com.google.datastore.v1beta3.Value.newBuilder();
       if (value.hasIndexed()) {
         builder.setIndexed(value.indexed());
       }
@@ -80,9 +80,9 @@ public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
       return builder.build();
     }
 
-    protected abstract V getValue(DatastoreV1.Value from);
+    protected abstract V getValue(com.google.datastore.v1beta3.Value from);
 
-    protected abstract void setValue(P from, DatastoreV1.Value.Builder to);
+    protected abstract void setValue(P from, com.google.datastore.v1beta3.Value.Builder to);
   }
 
   @SuppressWarnings("deprecation")
@@ -211,11 +211,11 @@ public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
 
   @Override
   @SuppressWarnings("unchecked")
-  protected DatastoreV1.Value toPb() {
+  protected com.google.datastore.v1beta3.Value toPb() {
     return type().getMarshaller().toProto(this);
   }
 
-  static Value<?> fromPb(DatastoreV1.Value proto) {
+  static Value<?> fromPb(com.google.datastore.v1beta3.Value proto) {
     for (Entry<FieldDescriptor, Object> entry : proto.getAllFields().entrySet()) {
       FieldDescriptor descriptor = entry.getKey();
       if (descriptor.getName().endsWith("_value")) {
@@ -232,6 +232,6 @@ public abstract class Value<V> extends Serializable<DatastoreV1.Value> {
 
   @Override
   protected Object fromPb(byte[] bytesPb) throws InvalidProtocolBufferException {
-    return fromPb(DatastoreV1.Value.parseFrom(bytesPb));
+    return fromPb(com.google.datastore.v1beta3.Value.parseFrom(bytesPb));
   }
 }
