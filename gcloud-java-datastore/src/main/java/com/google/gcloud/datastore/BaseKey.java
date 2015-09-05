@@ -185,7 +185,7 @@ abstract class BaseKey extends Serializable<com.google.datastore.v1beta3.Key> {
       keyPb.setPartitionId(partitionIdPb.build());
     }
     for (PathElement pathEntry : path) {
-      keyPb.addPathElement(pathEntry.toPb());
+      keyPb.addPath(pathEntry.toPb());
     }
     return keyPb.build();
   }

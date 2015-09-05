@@ -92,7 +92,7 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
     @SuppressWarnings("unchecked")
     protected B fill(com.google.datastore.v1beta3.Entity entityPb) {
       Map<String, Value<?>> copiedProperties = Maps.newHashMap();
-      for (com.google.datastore.v1beta3.Property property : entityPb.getPropertyList()) {
+      for (com.google.datastore.v1beta3.Property property : entityPb.getPropertiesList()) {
         copiedProperties.put(property.getName(), Value.fromPb(property.getValue()));
       }
       properties(copiedProperties);
@@ -386,12 +386,12 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
   @Override
   protected final com.google.datastore.v1beta3.Entity toPb() {
     com.google.datastore.v1beta3.Entity.Builder entityPb = com.google.datastore.v1beta3.Entity.newBuilder();
+    Map<String, com.google.datastore.v1beta3.Value> entrySet = new HashMap<String, com.google.datastore.v1beta3.Value>();
     for (Map.Entry<String, Value<?>> entry : properties.entrySet()) {
-      com.google.datastore.v1beta3.Property.Builder propertyPb = com.google.datastore.v1beta3.Property.newBuilder();
-      propertyPb.setName(entry.getKey());
-      propertyPb.setValue(entry.getValue().toPb());
-      entityPb.addProperty(propertyPb.build());
+      entrySet.put(entry.getKey(), entry.getValue().toPb());
     }
+    entityPb.addProperties(entrySet);
+
     if (key != null) {
       entityPb.setKey(key.toPb());
     }

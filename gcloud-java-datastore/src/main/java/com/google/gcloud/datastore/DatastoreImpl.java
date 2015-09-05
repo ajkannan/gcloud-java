@@ -126,11 +126,11 @@ final class DatastoreImpl extends BaseService<DatastoreOptions>
     }
     com.google.datastore.v1beta3.AllocateIdsRequest.Builder requestPb = com.google.datastore.v1beta3.AllocateIdsRequest.newBuilder();
     for (IncompleteKey key : keys) {
-      requestPb.addKey(trimNameOrId(key).toPb());
+      requestPb.addKeys(trimNameOrId(key).toPb());
     }
     com.google.datastore.v1beta3.AllocateIdsResponse responsePb = allocateIds(requestPb.build());
     ImmutableList.Builder<Key> keyList = ImmutableList.builder();
-    for (com.google.datastore.v1beta3.Key keyPb : responsePb.getKeyList()) {
+    for (com.google.datastore.v1beta3.Key keyPb : responsePb.getKeysList()) {
       keyList.add(Key.fromPb(keyPb));
     }
     return keyList.build();
@@ -223,7 +223,7 @@ final class DatastoreImpl extends BaseService<DatastoreOptions>
       requestPb.setReadOptions(readOptionsPb);
     }
     for (Key k : Sets.newLinkedHashSet(Arrays.asList(keys))) {
-      requestPb.addKey(k.toPb());
+      requestPb.addKeys(k.toPb());
     }
     return new ResultsIterator(requestPb);
   }

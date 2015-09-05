@@ -65,9 +65,9 @@ class QueryResultsImpl<T> extends AbstractIterator<T> implements QueryResults<T>
     query.populatePb(requestPb);
     queryResultBatchPb = datastore.runQuery(requestPb.build()).getBatch();
     lastBatch = queryResultBatchPb.getMoreResults() != MoreResultsType.NOT_FINISHED;
-    entityResultPbIter = queryResultBatchPb.getEntityResultList().iterator();
+    entityResultPbIter = queryResultBatchPb.getEntityResultsList().iterator();
     // cursor = resultPb.getSkippedCursor(); // available in v1beta3, use startCursor if not skipped
-    actualResultType = ResultType.fromPb(queryResultBatchPb.getEntityResultType());
+    actualResultType = ResultType.fromPb(queryResultBatchPb.getEntityResultsType());
     if (Objects.equals(queryResultType, ResultType.PROJECTION_ENTITY)) {
       // projection entity can represent all type of results
       actualResultType = ResultType.PROJECTION_ENTITY;

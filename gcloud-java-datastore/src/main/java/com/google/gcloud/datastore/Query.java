@@ -62,7 +62,7 @@ public abstract class Query<V> extends Serializable<GeneratedMessage> {
       private static final long serialVersionUID = 1602329532153860907L;
 
       @Override protected Object convert(com.google.datastore.v1beta3.Entity entityPb) {
-        if (entityPb.getPropertyCount() == 0) {
+        if (entityPb.getPropertiesCount() == 0) {
           if (!entityPb.hasKey()) {
             return null;
           }

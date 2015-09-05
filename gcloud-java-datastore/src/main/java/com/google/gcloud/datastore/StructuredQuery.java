@@ -172,7 +172,7 @@ public class StructuredQuery<V> extends Query<V> {
     static CompositeFilter fromPb(com.google.datastore.v1beta3.CompositeFilter compositeFilterPb) {
       Operator operator = Operator.fromPb(compositeFilterPb.getOp());
       ImmutableList.Builder<Filter> filters = ImmutableList.builder();
-      for (com.google.datastore.v1beta3.Filter filterPb : compositeFilterPb.getFilterList()) {
+      for (com.google.datastore.v1beta3.Filter filterPb : compositeFilterPb.getFiltersList()) {
         filters.add(Filter.fromPb(filterPb));
       }
       return new CompositeFilter(operator, filters.build());
@@ -926,7 +926,7 @@ public class StructuredQuery<V> extends Query<V> {
     } else {
       builder.offset(0);
       if (limit != null) {
-        builder.limit(limit - responsePb.getEntityResultCount());
+        builder.limit(limit - responsePb.getEntityResultsCount());
       }
     }
     return builder.build();

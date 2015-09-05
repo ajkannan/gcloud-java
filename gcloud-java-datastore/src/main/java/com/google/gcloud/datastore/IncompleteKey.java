@@ -70,10 +70,10 @@ public class IncompleteKey extends BaseKey {
         namespace = partitionIdPb.getNamespace();
       }
     }
-    List<com.google.datastore.v1beta3.Key.PathElement> pathElementsPb = keyPb.getPathElementList();
+    List<com.google.datastore.v1beta3.Key.Path> pathElementsPb = keyPb.getPathList();
     Preconditions.checkArgument(!pathElementsPb.isEmpty(), "Path must not be empty");
     ImmutableList.Builder<PathElement> pathBuilder = ImmutableList.builder();
-    for (com.google.datastore.v1beta3.Key.PathElement pathElementPb : pathElementsPb) {
+    for (com.google.datastore.v1beta3.Key.Path pathElementPb : pathElementsPb) {
       pathBuilder.add(PathElement.fromPb(pathElementPb));
     }
     ImmutableList<PathElement> path = pathBuilder.build();

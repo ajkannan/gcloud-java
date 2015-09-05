@@ -104,9 +104,9 @@ public class DatastoreOptions extends ServiceOptions<DatastoreRpc, DatastoreOpti
     // Replace provided project-id with full project-id (s~xxx, e~xxx,...)
     com.google.datastore.v1beta3.LookupRequest.Builder requestPb = com.google.datastore.v1beta3.LookupRequest.newBuilder();
     com.google.datastore.v1beta3.Key key = com.google.datastore.v1beta3.Key.newBuilder()
-        .addPathElement(com.google.datastore.v1beta3.Key.PathElement.newBuilder().setKind("__foo__").setName("bar"))
+        .addPath(com.google.datastore.v1beta3.Key.Path.newBuilder().setKind("__foo__").setName("bar"))
         .build();
-    requestPb.addKey(key);
+    requestPb.addKeys(key);
     try {
       LookupResponse responsePb = datastoreRpc().lookup(requestPb.build());
       if (responsePb.getDeferredCount() > 0) {
