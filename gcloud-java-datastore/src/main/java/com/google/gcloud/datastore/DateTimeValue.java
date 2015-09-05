@@ -41,12 +41,12 @@ public final class DateTimeValue extends Value<DateTime> {
 
         @Override
         protected DateTime getValue(com.google.datastore.v1beta3.Value from) {
-          return new DateTime(from.getTimestampMicrosecondsValue());
+          return new DateTime(from.getTimestampValue());
         }
 
         @Override
         protected void setValue(DateTimeValue from, com.google.datastore.v1beta3.Value.Builder to) {
-          to.setTimestampMicrosecondsValue(from.get().timestampMicroseconds());
+          to.setTimestampValue(from.get().timestampMicroseconds());
         }
       };
 

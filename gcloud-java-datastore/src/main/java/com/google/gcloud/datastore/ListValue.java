@@ -46,8 +46,8 @@ public final class ListValue extends Value<List<? extends Value<?>>> {
 
         @Override
         protected List<Value<?>> getValue(com.google.datastore.v1beta3.Value from) {
-          List<Value<?>> properties = new ArrayList<>(from.getListValueCount());
-          for (com.google.datastore.v1beta3.Value valuePb : from.getListValueList()) {
+          List<Value<?>> properties = new ArrayList<>(from.getArrayValueCount());
+          for (com.google.datastore.v1beta3.Value valuePb : from.getArrayValueList()) {
             properties.add(Value.fromPb(valuePb));
           }
           return properties;

@@ -46,11 +46,11 @@ class QueryResultsImpl<T> extends AbstractIterator<T> implements QueryResults<T>
     this.query = query;
     queryResultType = query.type();
     com.google.datastore.v1beta3.PartitionId.Builder pbBuilder = com.google.datastore.v1beta3.PartitionId.newBuilder();
-    pbBuilder.setDatasetId(datastore.options().projectId());
+    pbBuilder.setProjectId(datastore.options().projectId());
     if (query.namespace() != null) {
-      pbBuilder.setNamespace(query.namespace());
+      pbBuilder.setNamespaceId(query.namespace());
     } else if (datastore.options().namespace() != null) {
-      pbBuilder.setNamespace(datastore.options().namespace());
+      pbBuilder.setNamespaceId(datastore.options().namespace());
     }
     partitionIdPb = pbBuilder.build();
     sendRequest();

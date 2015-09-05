@@ -63,11 +63,11 @@ public class IncompleteKey extends BaseKey {
     String namespace = null;
     if (keyPb.hasPartitionId()) {
       com.google.datastore.v1beta3.PartitionId partitionIdPb = keyPb.getPartitionId();
-      if (partitionIdPb.hasDatasetId()) {
-        projectId = partitionIdPb.getDatasetId();
+      if (partitionIdPb.hasProjectId()) {
+        projectId = partitionIdPb.getProjectId();
       }
-      if (partitionIdPb.hasNamespace()) {
-        namespace = partitionIdPb.getNamespace();
+      if (partitionIdPb.hasNamespaceId()) {
+        namespace = partitionIdPb.getNamespaceId();
       }
     }
     List<com.google.datastore.v1beta3.Key.Path> pathElementsPb = keyPb.getPathList();

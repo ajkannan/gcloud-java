@@ -176,12 +176,12 @@ abstract class BaseKey extends Serializable<com.google.datastore.v1beta3.Key> {
     com.google.datastore.v1beta3.Key.Builder keyPb = com.google.datastore.v1beta3.Key.newBuilder();
     com.google.datastore.v1beta3.PartitionId.Builder partitionIdPb = com.google.datastore.v1beta3.PartitionId.newBuilder();
     if (projectId != null) {
-      partitionIdPb.setDatasetId(projectId);
+      partitionIdPb.setProjectId(projectId);
     }
     if (namespace != null) {
-      partitionIdPb.setNamespace(namespace);
+      partitionIdPb.setNamespaceId(namespace);
     }
-    if (partitionIdPb.hasDatasetId() || partitionIdPb.hasNamespace()) {
+    if (partitionIdPb.hasProjectId() || partitionIdPb.hasNamespaceId()) {
       keyPb.setPartitionId(partitionIdPb.build());
     }
     for (PathElement pathEntry : path) {

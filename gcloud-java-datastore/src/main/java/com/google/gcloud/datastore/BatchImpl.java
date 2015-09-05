@@ -40,7 +40,7 @@ class BatchImpl extends BaseDatastoreBatchWriter implements Batch {
 
     @Override
     public List<Key> generatedKeys() {
-      return Lists.transform(response.getMutationResult().getInsertAutoIdKeyList(),
+      return Lists.transform(response.getMutationResult().getKeyList(),
           new Function<com.google.datastore.v1beta3.Key, Key>() {
             @Override public Key apply(com.google.datastore.v1beta3.Key keyPb) {
               return Key.fromPb(keyPb);

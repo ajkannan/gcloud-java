@@ -116,7 +116,7 @@ public class DatastoreOptions extends ServiceOptions<DatastoreRpc, DatastoreOpti
             Iterables.concat(responsePb.getMissingList(), responsePb.getFoundList()).iterator();
         key = combinedIter.next().getEntity().getKey();
       }
-      builder.projectId(key.getPartitionId().getDatasetId());
+      builder.projectId(key.getPartitionId().getProjectId());
       return new DatastoreOptions(builder);
     } catch (DatastoreRpcException e) {
       throw DatastoreException.translateAndThrow(e);
