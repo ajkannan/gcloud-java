@@ -78,22 +78,19 @@ public final class GqlQuery<V> extends Query<V> {
   private final transient ImmutableList<Binding> namedBindings;
   private final transient ImmutableList<Binding> positionalBindings;
 
-  static final class Binding extends Serializable<com.google.datastore.v1beta3.GqlQueryArg> {
+  static final class Binding extends Serializable<com.google.datastore.v1beta3.GqlQueryParameter> {
 
     private static final long serialVersionUID = 1976895435257636275L;
 
-    private final transient String name;
     private final transient Cursor cursor;
     private final transient Value<?> value;
 
     Binding(String name, Cursor cursor) {
-      this.name = name;
       this.cursor = checkNotNull(cursor);
       value = null;
     }
 
     Binding(String name, Value<?> value) {
-      this.name = name;
       this.value = checkNotNull(value);
       cursor = null;
     }
@@ -102,13 +99,9 @@ public final class GqlQuery<V> extends Query<V> {
       return MoreObjects.firstNonNull(cursor, value);
     }
 
-    String name() {
-      return name;
-    }
-
     @Override
     public int hashCode() {
-      return Objects.hash(name, cursor, value);
+      return Objects.hash(cursor, value);
     }
 
     @Override
@@ -120,17 +113,13 @@ public final class GqlQuery<V> extends Query<V> {
         return false;
       }
       Binding other = (Binding) obj;
-      return Objects.equals(name, other.name)
-          && Objects.equals(cursor, other.cursor)
+      return Objects.equals(cursor, other.cursor)
           && Objects.equals(value, other.value);
     }
 
     @Override
-    protected com.google.datastore.v1beta3.GqlQueryArg toPb() {
-      com.google.datastore.v1beta3.GqlQueryArg.Builder argPb = com.google.datastore.v1beta3.GqlQueryArg.newBuilder();
-      if (name != null) {
-        argPb.setName(name);
-      }
+    protected com.google.datastore.v1beta3.GqlQueryParameter toPb() {
+      com.google.datastore.v1beta3.GqlQueryParameter.Builder argPb = com.google.datastore.v1beta3.GqlQueryParameter.newBuilder();
       if (cursor != null) {
         argPb.setCursor(cursor.byteString());
       }
@@ -142,15 +131,14 @@ public final class GqlQuery<V> extends Query<V> {
 
     @Override
     protected Object fromPb(byte[] bytesPb) throws InvalidProtocolBufferException {
-      return fromPb(com.google.datastore.v1beta3.GqlQueryArg.parseFrom(bytesPb));
+      return fromPb(com.google.datastore.v1beta3.GqlQueryParameter.parseFrom(bytesPb));
     }
 
-    static Binding fromPb(com.google.datastore.v1beta3.GqlQueryArg argPb) {
-      String name = argPb.hasName() ? argPb.getName() : null;
+    static Binding fromPb(com.google.datastore.v1beta3.GqlQueryParameter argPb) {
       if (argPb.hasCursor()) {
-        return new Binding(name, new Cursor(argPb.getCursor()));
+        return new Binding(new Cursor(argPb.getCursor()));
       }
-      return new Binding(name, Value.fromPb(argPb.getValue()));
+      return new Binding(Value.fromPb(argPb.getValue()));
     }
   }
 
@@ -407,11 +395,11 @@ public final class GqlQuery<V> extends Query<V> {
     if (queryPb.hasAllowLiterals()) {
       builder.allowLiteral = queryPb.getAllowLiterals();
     }
-    for (com.google.datastore.v1beta3.GqlQueryArg nameArg : queryPb.getNamedBindings()) {
+    for (com.google.datastore.v1beta3.GqlQueryParameter nameArg : queryPb.getNamedBindings()) {
       Binding argument = Binding.fromPb(nameArg);
       builder.namedBindings.put(argument.name(), argument);
     }
-    for (com.google.datastore.v1beta3.GqlQueryArg numberArg : queryPb.getPositionalBindingsList()) {
+    for (com.google.datastore.v1beta3.GqlQueryParameter numberArg : queryPb.getPositionalBindingsList()) {
       Binding argument = Binding.fromPb(numberArg);
       builder.positionalBindings.add(argument);
     }

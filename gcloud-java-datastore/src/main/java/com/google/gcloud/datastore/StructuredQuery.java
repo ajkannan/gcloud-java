@@ -518,30 +518,15 @@ public class StructuredQuery<V> extends Query<V> {
 
     private static final long serialVersionUID = 3083707957256279470L;
 
-    private final Aggregate aggregate;
     private final String property;
 
-    public enum Aggregate {
-
-      FIRST;
-
-      com.google.datastore.v1beta3.PropertyExpression.AggregationFunction toPb() {
-        return com.google.datastore.v1beta3.PropertyExpression.AggregationFunction.valueOf(name());
-      }
-
-      static Aggregate fromPb(com.google.datastore.v1beta3.PropertyExpression.AggregationFunction aggregatePb) {
-        return valueOf(aggregatePb.name());
-      }
-    }
-
-    private Projection(Aggregate aggregate, String property) {
-      this.aggregate = aggregate;
+    private Projection(String property) {
       this.property = property;
     }
 
     @Override
     public int hashCode() {
-      return Objects.hash(property, aggregate);
+      return Objects.hash(property);
     }
 
     @Override
@@ -553,50 +538,35 @@ public class StructuredQuery<V> extends Query<V> {
         return false;
       }
       Projection other = (Projection) obj;
-      return Objects.equals(property, other.property)
-          && Objects.equals(aggregate, other.aggregate);
+      return Objects.equals(property, other.property);
     }
 
     @Override
     public String toString() {
       ToStringHelper toStringHelper = MoreObjects.toStringHelper(this);
       toStringHelper.add("property", property);
-      if (aggregate != null) {
-        toStringHelper.add("aggregate", aggregate);
-      }
       return toStringHelper.toString();
     }
 
-    com.google.datastore.v1beta3.PropertyExpression toPb() {
-      com.google.datastore.v1beta3.PropertyExpression.Builder expressionPb =
-          com.google.datastore.v1beta3.PropertyExpression.newBuilder();
-      if (aggregate != null) {
-        expressionPb.setAggregationFunction(aggregate.toPb());
-      }
+    com.google.datastore.v1beta3.Projection toPb() {
+      com.google.datastore.v1beta3.Projection.Builder expressionPb =
+          com.google.datastore.v1beta3.Projection.newBuilder();
       expressionPb.setProperty(
           com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(property).build());
       return expressionPb.build();
     }
 
-    public static Projection fromPb(com.google.datastore.v1beta3.PropertyExpression propertyExpressionPb) {
+    public static Projection fromPb(com.google.datastore.v1beta3.Projection propertyExpressionPb) {
       String property = propertyExpressionPb.getProperty().getName();
-      Aggregate aggregate = null;
-      if (propertyExpressionPb.hasAggregationFunction()) {
-        aggregate = Aggregate.fromPb(propertyExpressionPb.getAggregationFunction());
-      }
-      return new Projection(aggregate, property);
+      return new Projection(property);
     }
 
     public static Projection property(String property) {
       return new Projection(null, property);
     }
 
-    public static Projection aggregate(Aggregate aggregate, String property) {
-      return new Projection(aggregate, property);
-    }
-
     public static Projection first(String property) {
-      return new Projection(Aggregate.FIRST, property);
+      return new Projection(property);
     }
   }
 
@@ -733,7 +703,7 @@ public class StructuredQuery<V> extends Query<V> {
       for (com.google.datastore.v1beta3.PropertyOrder orderByPb : queryPb.getOrderList()) {
         addOrderBy(OrderBy.fromPb(orderByPb));
       }
-      for (com.google.datastore.v1beta3.PropertyExpression projectionPb : queryPb.getProjectionList()) {
+      for (com.google.datastore.v1beta3.Projection projectionPb : queryPb.getProjectionList()) {
         addProjection(Projection.fromPb(projectionPb));
       }
       for (com.google.datastore.v1beta3.PropertyReference groupByPb : queryPb.getGroupByList()) {
