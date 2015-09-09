@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;

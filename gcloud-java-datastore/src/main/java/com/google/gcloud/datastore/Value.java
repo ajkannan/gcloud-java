@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -57,8 +56,8 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
     @Override
     public final B fromProto(com.google.datastore.v1beta3.Value proto) {
       B builder = newBuilder(getValue(proto));
-      if (proto.hasIndexed()) {
-        builder.indexed(proto.getIndexed());
+      if (proto.hasExcludeFromIndexes()) {
+        builder.indexed(!proto.getExcludeFromIndexes());
       }
       if (proto.hasMeaning()) {
         builder.meaning(proto.getMeaning());
@@ -71,7 +70,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
     public final com.google.datastore.v1beta3.Value toProto(P value) {
       com.google.datastore.v1beta3.Value.Builder builder = com.google.datastore.v1beta3.Value.newBuilder();
       if (value.hasIndexed()) {
-        builder.setIndexed(value.indexed());
+        builder.setExcludeFromIndexes(!value.indexed());
       }
       if (value.hasMeaning()) {
         builder.setMeaning(value.meaning());

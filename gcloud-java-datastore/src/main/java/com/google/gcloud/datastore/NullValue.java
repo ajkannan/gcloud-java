@@ -18,8 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-
-
 public final class NullValue extends Value<Void> {
 
   private static final long serialVersionUID = 8497300779013002270L;

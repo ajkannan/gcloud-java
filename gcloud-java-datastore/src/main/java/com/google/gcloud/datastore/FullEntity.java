@@ -16,8 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
-
 /**
  * A full entity is a {@link BaseEntity} that with a complete set of properties.
  */

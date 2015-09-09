@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.InvalidProtocolBufferException;

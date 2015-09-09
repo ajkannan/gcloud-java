@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.datastore.v1beta3.QueryResultBatch.MoreResultsType;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;

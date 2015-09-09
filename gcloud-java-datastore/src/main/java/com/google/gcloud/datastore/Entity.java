@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
 import com.google.common.base.Preconditions;
 
 /**

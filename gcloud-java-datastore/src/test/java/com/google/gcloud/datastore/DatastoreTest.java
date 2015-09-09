@@ -25,7 +25,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-
 import com.google.datastore.v1beta3.EntityResult;
 import com.google.common.collect.Iterators;
 import com.google.gcloud.RetryParams;

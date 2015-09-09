@@ -20,7 +20,6 @@ import static com.google.gcloud.datastore.Validator.validateDatabase;
 import static com.google.gcloud.datastore.Validator.validateKind;
 import static com.google.gcloud.datastore.Validator.validateNamespace;
 
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 

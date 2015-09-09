@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.AbstractIterator;
@@ -251,7 +250,7 @@ final class DatastoreImpl extends BaseService<DatastoreOptions>
     @Override
     protected Entity computeNext() {
       while (!iter.hasNext()) {
-        if (requestPb.getKeyCount() == 0) {
+        if (requestPb.getKeysCount() == 0) {
           return endOfData();
         }
         loadResults();

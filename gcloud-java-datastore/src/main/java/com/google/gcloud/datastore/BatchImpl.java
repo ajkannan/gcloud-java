@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gcloud.datastore.BatchOption.ForceWrites;

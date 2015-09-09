@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -70,10 +69,10 @@ public class IncompleteKey extends BaseKey {
         namespace = partitionIdPb.getNamespaceId();
       }
     }
-    List<com.google.datastore.v1beta3.Key.Path> pathElementsPb = keyPb.getPathList();
+    List<com.google.datastore.v1beta3.Key.PathElement> pathElementsPb = keyPb.getPathList();
     Preconditions.checkArgument(!pathElementsPb.isEmpty(), "Path must not be empty");
     ImmutableList.Builder<PathElement> pathBuilder = ImmutableList.builder();
-    for (com.google.datastore.v1beta3.Key.Path pathElementPb : pathElementsPb) {
+    for (com.google.datastore.v1beta3.Key.PathElement pathElementPb : pathElementsPb) {
       pathBuilder.add(PathElement.fromPb(pathElementPb));
     }
     ImmutableList<PathElement> path = pathBuilder.build();

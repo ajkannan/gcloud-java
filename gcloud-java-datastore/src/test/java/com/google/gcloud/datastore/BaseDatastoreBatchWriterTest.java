@@ -21,7 +21,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.junit.Assert.assertEquals;
 
-
 import com.google.common.collect.ImmutableList;
 
 import org.easymock.EasyMock;

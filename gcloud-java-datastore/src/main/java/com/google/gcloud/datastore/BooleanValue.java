@@ -18,8 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.datastore.v1beta3.Value.BOOLEAN_VALUE_FIELD_NUMBER;
 
-
-
 public final class BooleanValue extends Value<Boolean> {
 
   private static final long serialVersionUID = -542649497897250340L;

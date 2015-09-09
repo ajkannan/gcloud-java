@@ -18,8 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.datastore.v1beta3.Value.INTEGER_VALUE_FIELD_NUMBER;
 
-
-
 public final class LongValue extends Value<Long> {
 
   private static final long serialVersionUID = -8552854340400546861L;

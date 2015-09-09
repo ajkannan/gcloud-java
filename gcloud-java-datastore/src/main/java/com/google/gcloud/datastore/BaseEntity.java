@@ -27,7 +27,6 @@ import static com.google.gcloud.datastore.LongValue.of;
 import static com.google.gcloud.datastore.NullValue.of;
 import static com.google.gcloud.datastore.StringValue.of;
 
-
 import com.google.common.collect.ImmutableSortedMap;
 import com.google.common.collect.Maps;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -92,8 +91,8 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
     @SuppressWarnings("unchecked")
     protected B fill(com.google.datastore.v1beta3.Entity entityPb) {
       Map<String, Value<?>> copiedProperties = Maps.newHashMap();
-      for (com.google.datastore.v1beta3.Property property : entityPb.getPropertiesList()) {
-        copiedProperties.put(property.getName(), Value.fromPb(property.getValue()));
+      for (Map.Entry<String, com.google.datastore.v1beta3.Value> property : entityPb.getProperties().entrySet()) {
+        copiedProperties.put(property.getKey(), Value.fromPb(property.getValue()));
       }
       properties(copiedProperties);
       if (entityPb.hasKey()) {
@@ -386,11 +385,11 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
   @Override
   protected final com.google.datastore.v1beta3.Entity toPb() {
     com.google.datastore.v1beta3.Entity.Builder entityPb = com.google.datastore.v1beta3.Entity.newBuilder();
-    Map<String, com.google.datastore.v1beta3.Value> entrySet = new HashMap<String, com.google.datastore.v1beta3.Value>();
+    Map<String, com.google.datastore.v1beta3.Value> propertiesPb = new HashMap<String, com.google.datastore.v1beta3.Value>();
     for (Map.Entry<String, Value<?>> entry : properties.entrySet()) {
-      entrySet.put(entry.getKey(), entry.getValue().toPb());
+      propertiesPb.put(entry.getKey(), entry.getValue().toPb());
     }
-    entityPb.addProperties(entrySet);
+    entityPb.putAllProperties(propertiesPb);
 
     if (key != null) {
       entityPb.setKey(key.toPb());

@@ -16,8 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
-
 public final class RawValue extends Value<com.google.datastore.v1beta3.Value> {
 
   private static final long serialVersionUID = -3359604598651897941L;
@@ -80,8 +78,8 @@ public final class RawValue extends Value<com.google.datastore.v1beta3.Value> {
 
   static Builder builder(com.google.datastore.v1beta3.Value valuePb) {
     Builder builder = new Builder();
-    if (valuePb.hasIndexed()) {
-      builder.indexed(valuePb.getIndexed());
+    if (valuePb.hasExcludeFromIndexes()) {
+      builder.indexed(!valuePb.getExcludeFromIndexes());
     }
     if (valuePb.hasMeaning()) {
       builder.meaning(valuePb.getMeaning());

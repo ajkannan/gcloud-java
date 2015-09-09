@@ -18,8 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.datastore.v1beta3.Value.BLOB_VALUE_FIELD_NUMBER;
 
-
-
 public final class BlobValue extends Value<Blob> {
 
   private static final long serialVersionUID = -5096238337676649540L;

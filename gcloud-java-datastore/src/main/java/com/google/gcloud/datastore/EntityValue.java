@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.datastore.v1beta3.Value.ENTITY_VALUE_FIELD_NUMBER;
 
-
 import com.google.common.base.Preconditions;
 
 public class EntityValue extends Value<FullEntity<?>> {

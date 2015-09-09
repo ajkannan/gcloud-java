@@ -18,8 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.datastore.v1beta3.Value.DOUBLE_VALUE_FIELD_NUMBER;
 
-
-
 public final class DoubleValue extends Value<Double> {
 
   private static final long serialVersionUID = -5096238337676649540L;

@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.collect.ImmutableMap;
 
 import java.io.Serializable;
@@ -45,44 +44,7 @@ public abstract class TransactionOption implements Serializable {
     BatchOption toBatchWriteOption() {
       return new BatchOption.ForceWrites(force);
     }
-  }
-
-  public static final class IsolationLevel extends TransactionOption {
-
-    private static final long serialVersionUID = -5592165378565409515L;
-
-    private final Level level;
-
-    public enum Level {
-
-      SERIALIZABLE(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel.SERIALIZABLE),
-      SNAPSHOT(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel.SNAPSHOT);
-
-      private final com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel levelPb;
-
-      Level(com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel levelPb) {
-        this.levelPb = levelPb;
-      }
-
-      com.google.datastore.v1beta3.BeginTransactionRequest.IsolationLevel toPb() {
-        return levelPb;
-      }
-    }
-
-    public IsolationLevel(Level level) {
-      this.level = level;
-    }
-
-
-    public Level level() {
-      return level;
-    }
-
-    @Override
-    BatchOption toBatchWriteOption() {
-      return null;
-    }
-  }
+  }  
 
   TransactionOption() {
     // package protected
@@ -90,14 +52,6 @@ public abstract class TransactionOption implements Serializable {
 
   public static ForceWrites forceWrites() {
     return new ForceWrites(true);
-  }
-
-  public static IsolationLevel serializable() {
-    return new IsolationLevel(IsolationLevel.Level.SERIALIZABLE);
-  }
-
-  public static IsolationLevel snapshot() {
-    return new IsolationLevel(IsolationLevel.Level.SNAPSHOT);
   }
 
   static Map<Class<? extends TransactionOption>, TransactionOption> asImmutableMap(

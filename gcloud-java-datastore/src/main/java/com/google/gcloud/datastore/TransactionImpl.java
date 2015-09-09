@@ -16,11 +16,9 @@
 
 package com.google.gcloud.datastore;
 
-
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gcloud.datastore.TransactionOption.ForceWrites;
-import com.google.gcloud.datastore.TransactionOption.IsolationLevel;
 import com.google.protobuf.ByteString;
 
 import java.util.Iterator;
@@ -60,10 +58,6 @@ final class TransactionImpl extends BaseDatastoreBatchWriter implements Transact
         com.google.datastore.v1beta3.BeginTransactionRequest.newBuilder();
     Map<Class<? extends TransactionOption>, TransactionOption> optionsMap =
         TransactionOption.asImmutableMap(options);
-    IsolationLevel isolationLevel = (IsolationLevel) optionsMap.get(IsolationLevel.class);
-    if (isolationLevel != null) {
-      requestPb.setIsolationLevel(isolationLevel.level().toPb());
-    }
     ForceWrites forceWrites = (ForceWrites) optionsMap.get(TransactionOption.ForceWrites.class);
     force = forceWrites != null && forceWrites.force();
     transaction = datastore.requestTransactionId(requestPb);

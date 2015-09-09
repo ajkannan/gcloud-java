@@ -16,8 +16,7 @@
 
 package com.google.gcloud.datastore;
 
-import static com.google.datastore.v1beta3.Value.LIST_VALUE_FIELD_NUMBER;
-
+import static com.google.datastore.v1beta3.Value.ARRAY_VALUE_FIELD_NUMBER;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -36,7 +35,7 @@ public final class ListValue extends Value<List<? extends Value<?>>> {
 
         @Override
         public int getProtoFieldId() {
-          return LIST_VALUE_FIELD_NUMBER;
+          return ARRAY_VALUE_FIELD_NUMBER;
         }
 
         @Override
@@ -45,18 +44,18 @@ public final class ListValue extends Value<List<? extends Value<?>>> {
         }
 
         @Override
-        protected List<Value<?>> getValue(com.google.datastore.v1beta3.Value from) {
-          List<Value<?>> properties = new ArrayList<>(from.getArrayValueCount());
-          for (com.google.datastore.v1beta3.Value valuePb : from.getArrayValueList()) {
+        protected List<Value<?>> getValue(com.google.datastore.v1beta3.ArrayValue from) {
+          List<Value<?>> properties = new ArrayList<>(from.getValuesCount());
+          for (com.google.datastore.v1beta3.Value valuePb : from.getValuesList()) {
             properties.add(Value.fromPb(valuePb));
           }
           return properties;
         }
 
         @Override
-        protected void setValue(ListValue from, com.google.datastore.v1beta3.Value.Builder to) {
+        protected void setValue(ListValue from, com.google.datastore.v1beta3.ArrayValue.Builder to) {
           for (Value<?> property : from.get()) {
-            to.addListValue(property.toPb());
+            to.addValues(property.toPb());
           }
         }
       };

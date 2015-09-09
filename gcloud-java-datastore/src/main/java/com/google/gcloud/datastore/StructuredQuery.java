@@ -25,7 +25,6 @@ import static com.google.gcloud.datastore.KeyValue.of;
 import static com.google.gcloud.datastore.LongValue.of;
 import static com.google.gcloud.datastore.StringValue.of;
 
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Preconditions;
@@ -122,11 +121,11 @@ public class StructuredQuery<V> extends Query<V> {
     enum Operator {
       AND;
 
-      com.google.datastore.v1beta3.CompositeFilter.Op toPb() {
-        return com.google.datastore.v1beta3.CompositeFilter.Op.valueOf(name());
+      com.google.datastore.v1beta3.CompositeFilter.Operator toPb() {
+        return com.google.datastore.v1beta3.CompositeFilter.Operator.valueOf(name());
       }
 
-      static Operator fromPb(com.google.datastore.v1beta3.CompositeFilter.Op operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.CompositeFilter.Operator operatorPb) {
         return valueOf(operatorPb.name());
       }
     }
@@ -188,7 +187,7 @@ public class StructuredQuery<V> extends Query<V> {
       com.google.datastore.v1beta3.CompositeFilter.Builder compositeFilterPb = filterPb.getCompositeFilterBuilder();
       compositeFilterPb.setOp(operator.toPb());
       for (Filter filter : filters) {
-        compositeFilterPb.addFilter(filter.toPb());
+        compositeFilterPb.addFilters(filter.toPb());
       }
       return filterPb.build();
     }
@@ -211,10 +210,10 @@ public class StructuredQuery<V> extends Query<V> {
       HAS_ANCESTOR;
 
       com.google.datastore.v1beta3.PropertyFilter.Operator toPb() {
-        return com.google.datastore.v1beta3.PropertyFilter.Op.valueOf(name());
+        return com.google.datastore.v1beta3.PropertyFilter.Operator.valueOf(name());
       }
 
-      static Operator fromPb(com.google.datastore.v1beta3.PropertyFilter.Op operatorPb) {
+      static Operator fromPb(com.google.datastore.v1beta3.PropertyFilter.Operator operatorPb) {
         return valueOf(operatorPb.name());
       }
     }

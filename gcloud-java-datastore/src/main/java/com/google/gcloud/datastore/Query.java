@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Maps;
@@ -62,7 +61,7 @@ public abstract class Query<V> extends Serializable<GeneratedMessage> {
       private static final long serialVersionUID = 1602329532153860907L;
 
       @Override protected Object convert(com.google.datastore.v1beta3.Entity entityPb) {
-        if (entityPb.getPropertiesCount() == 0) {
+        if (entityPb.getProperties().isEmpty() == 0) {
           if (!entityPb.hasKey()) {
             return null;
           }

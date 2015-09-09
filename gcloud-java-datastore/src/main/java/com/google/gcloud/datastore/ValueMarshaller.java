@@ -16,8 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-
-
 /**
  * A common interface for Value marshallers.
  */
