@@ -110,6 +110,6 @@ public final class Cursor extends Serializable<com.google.datastore.v1beta3.Valu
   }
 
   static Cursor fromPb(com.google.datastore.v1beta3.Value valuePb) {
-    return new Cursor(com.google.datastore.v1beta3.valuePb.getBlobValue());
+    return new Cursor(valuePb.getBlobValue());
   }
 }

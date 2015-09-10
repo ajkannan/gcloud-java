@@ -45,11 +45,11 @@ public class BlobValueTest {
   @Test
   public void testBuilder() throws Exception {
     BlobValue.Builder builder = BlobValue.builder(CONTENT);
-    BlobValue value = builder.meaning(1).indexed(false).build();
+    BlobValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }

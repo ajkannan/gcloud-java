@@ -61,7 +61,7 @@ public class LocalGcdHelper {
 
   public static final String DEFAULT_PROJECT_ID = "projectid1";
   public static final int PORT = 8080;
-  private static final String GCD = "gcd-v1beta2-0.0.1";
+  private static final String GCD = "gcd-v1beta3-0.0.1";
   private static final String GCD_FILENAME = GCD + ".zip";
   private static final String MD5_CHECKSUM = "d84384cdfa8658e1204f4f8be51300e8";
   private static final URL GCD_URL;

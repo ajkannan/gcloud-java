@@ -58,7 +58,7 @@ public class DatastoreTest {
   private static final String KIND3 = "kind3";
   private static final NullValue NULL_VALUE = NullValue.of();
   private static final StringValue STR_VALUE = StringValue.of("str");
-  private static final BooleanValue BOOL_VALUE = BooleanValue.builder(false).indexed(false).build();
+  private static final BooleanValue BOOL_VALUE = BooleanValue.builder(false).excludeFromIndexes(true).build();
   private static final IncompleteKey INCOMPLETE_KEY1 =
       IncompleteKey.builder(PROJECT_ID, KIND1).build();
   private static final IncompleteKey INCOMPLETE_KEY2 =
@@ -636,7 +636,7 @@ public class DatastoreTest {
   @Test
   public void testRetires() throws Exception {
     com.google.datastore.v1beta3.LookupRequest requestPb =
-        com.google.datastore.v1beta3.LookupRequest.newBuilder().addKey(KEY1.toPb()).build();
+        com.google.datastore.v1beta3.LookupRequest.newBuilder().addKeys(KEY1.toPb()).build();
     com.google.datastore.v1beta3.LookupResponse responsePb = com.google.datastore.v1beta3.LookupResponse.newBuilder()
         .addFound(EntityResult.newBuilder().setEntity(ENTITY1.toPb())).build();
     DatastoreRpcFactory rpcFactoryMock = EasyMock.createStrictMock(DatastoreRpcFactory.class);

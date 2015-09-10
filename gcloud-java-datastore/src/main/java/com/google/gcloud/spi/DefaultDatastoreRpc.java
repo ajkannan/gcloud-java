@@ -89,7 +89,7 @@ public class DefaultDatastoreRpc implements DatastoreRpc {
     }
     return reason != null
         ? new DatastoreRpcException(reason)
-        : new DatastoreRpcException("Unknown", exception.getCode(), false, message);
+        : new DatastoreRpcException("Unknown", exception.getCode().ordinal(), false, message);
   }
 
   @Override

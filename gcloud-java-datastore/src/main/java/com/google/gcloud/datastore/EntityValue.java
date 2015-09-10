@@ -57,10 +57,10 @@ public class EntityValue extends Value<FullEntity<?>> {
     }
 
     @Override
-    public Builder indexed(boolean indexed) {
+    public Builder excludeFromIndexes(boolean excludeFromIndexes) {
       // see issue #25
-      Preconditions.checkArgument(!indexed, "EntityValue can't be indexed");
-      return super.indexed(indexed);
+      Preconditions.checkArgument(excludeFromIndexes, "EntityValue can't be indexed");
+      return super.excludeFromIndexes(excludeFromIndexes);
     }
 
     @Override
@@ -87,6 +87,6 @@ public class EntityValue extends Value<FullEntity<?>> {
   }
 
   public static Builder builder(FullEntity<?> entity) {
-    return new Builder().set(entity).indexed(false);
+    return new Builder().set(entity).excludeFromIndexes(true);
   }
 }

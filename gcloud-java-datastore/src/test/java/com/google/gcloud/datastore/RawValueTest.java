@@ -45,11 +45,11 @@ public class RawValueTest {
   @Test
   public void testBuilder() throws Exception {
     RawValue.Builder builder = RawValue.builder(CONTENT);
-    RawValue value = builder.meaning(1).indexed(false).build();
+    RawValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }

@@ -83,15 +83,23 @@ public class BaseDatastoreBatchWriterTest {
   public void testAdd() throws Exception {
     Entity entity2 =
         Entity.builder(ENTITY2).key(Key.builder(KEY1).name("name2").build()).build();
-    com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addInsert(ENTITY1.toPb())
-        .addInsert(entity2.toPb())
-        .addInsert(Entity.builder(KEY2, INCOMPLETE_ENTITY_1).build().toPb())
-        .addInsert(Entity.builder(KEY3, INCOMPLETE_ENTITY_2).build().toPb())
-        .build();
+    com.google.datastore.v1beta3.Mutation pb1 = 
+        com.google.datastore.v1beta3.Mutation.newBuilder().setInsert(ENTITY1.toPb()).build();
+    com.google.datastore.v1beta3.Mutation pb2 = 
+        com.google.datastore.v1beta3.Mutation.newBuilder().setInsert(entity2.toPb()).build();
+    com.google.datastore.v1beta3.Mutation pb3 = 
+        com.google.datastore.v1beta3.Mutation.newBuilder()
+        .setInsert(Entity.builder(KEY2, INCOMPLETE_ENTITY_1).build().toPb()).build();
+    com.google.datastore.v1beta3.Mutation pb4 = 
+        com.google.datastore.v1beta3.Mutation.newBuilder()
+        .setInsert(Entity.builder(KEY3, INCOMPLETE_ENTITY_2).build().toPb()).build();
     List<Entity> entities = batchWriter
         .add(ENTITY1, INCOMPLETE_ENTITY_1, INCOMPLETE_ENTITY_2, entity2);
-    assertEquals(pb, batchWriter.toMutationPb().build());
+    List<com.google.datastore.v1beta3.Mutation> mutationResultsPb = batchWriter.toMutationPb();
+    assertEquals(pb1, mutationResultsPb.get(0).build());
+    assertEquals(pb2, mutationResultsPb.get(1).build());
+    assertEquals(pb3, mutationResultsPb.get(2).build());
+    assertEquals(pb4, mutationResultsPb.get(3).build());
     assertEquals(ENTITY1, entities.get(0));
     assertEquals(Entity.builder(KEY2, INCOMPLETE_ENTITY_1).build(), entities.get(1));
     assertEquals(Entity.builder(KEY3, INCOMPLETE_ENTITY_2).build(), entities.get(2));
@@ -101,10 +109,11 @@ public class BaseDatastoreBatchWriterTest {
   @Test
   public void testAddAfterDelete() throws Exception {
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addUpsert(ENTITY1.toPb())
+        .setUpsert(ENTITY1.toPb())
         .build();
     batchWriter.delete(KEY1);
     batchWriter.add(ENTITY1);
+    List<com.google.datastore.v1beta3.Mutation> mutationResultsPb = batchWriter.toMutationPb();
     assertEquals(pb, batchWriter.toMutationPb().build());
   }
 
@@ -223,7 +232,7 @@ public class BaseDatastoreBatchWriterTest {
   public void testPutAfterPut() throws Exception {
     Entity entity = Entity.builder(ENTITY1).set("foo", "bar").build();
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addUpsert(entity.toPb())
+        .setUpsert(entity.toPb())
         .build();
     batchWriter.put(ENTITY1);
     batchWriter.put(entity);
@@ -234,7 +243,7 @@ public class BaseDatastoreBatchWriterTest {
   public void testPutAfterAdd() throws Exception {
     Entity entity = Entity.builder(ENTITY1).set("foo", "bar").build();
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addUpsert(entity.toPb())
+        .setUpsert(entity.toPb())
         .build();
     batchWriter.add(ENTITY1);
     batchWriter.put(entity);
@@ -245,7 +254,7 @@ public class BaseDatastoreBatchWriterTest {
   public void testPutAfterUpdate() throws Exception {
     Entity entity = Entity.builder(ENTITY1).set("foo", "bar").build();
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addUpsert(entity.toPb())
+        .setUpsert(entity.toPb())
         .build();
     batchWriter.update(ENTITY1);
     batchWriter.put(entity);
@@ -256,7 +265,7 @@ public class BaseDatastoreBatchWriterTest {
   public void testPutAfterDelete() throws Exception {
     Entity entity = Entity.builder(ENTITY1).set("foo", "bar").build();
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addUpsert(entity.toPb())
+        .setUpsert(entity.toPb())
         .build();
     batchWriter.delete(KEY1);
     batchWriter.put(entity);
@@ -306,7 +315,7 @@ public class BaseDatastoreBatchWriterTest {
   @Test
   public void testDeleteAfterPut() throws Exception {
     com.google.datastore.v1beta3.Mutation pb = com.google.datastore.v1beta3.Mutation.newBuilder()
-        .addDelete(KEY1.toPb())
+        .setDelete(KEY1.toPb())
         .build();
     batchWriter.put(ENTITY1);
     batchWriter.delete(KEY1);

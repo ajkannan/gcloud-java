@@ -139,15 +139,15 @@ public final class GqlQuery<V> extends Query<V> {
 
     @Override
     protected Object fromPb(byte[] bytesPb) throws InvalidProtocolBufferException {
-      return fromPb(com.google.datastore.v1beta3.GqlQueryParameter.parseFrom(bytesPb));
+      return fromPb(null, com.google.datastore.v1beta3.GqlQueryParameter.parseFrom(bytesPb));
     }
 
-    static Binding fromPb(com.google.datastore.v1beta3.GqlQueryParameter argPb) {
+    static Binding fromPb(String name, com.google.datastore.v1beta3.GqlQueryParameter argPb) {
       if (argPb.getParameterTypeCase() == 
           com.google.datastore.v1beta3.GqlQueryParameter.ParameterTypeCase.CURSOR) {
-        return new Binding(null, new Cursor(argPb.getCursor()));
+        return new Binding(name, new Cursor(argPb.getCursor()));
       }
-      return new Binding(null, Value.fromPb(argPb.getValue()));
+      return new Binding(name, Value.fromPb(argPb.getValue()));
     }
   }
 
@@ -407,12 +407,12 @@ public final class GqlQuery<V> extends Query<V> {
     builder.allowLiteral = queryPb.getAllowLiterals();
     for (Map.Entry<String, com.google.datastore.v1beta3.GqlQueryParameter> entry 
         : queryPb.getNamedBindings().entrySet()) {
-      Binding argument = Binding.fromPb(entry.getValue());
+      Binding argument = Binding.fromPb(entry.getKey(), entry.getValue());
       builder.namedBindings.put(entry.getKey(), argument);
     }
     for (com.google.datastore.v1beta3.GqlQueryParameter numberArg 
         : queryPb.getPositionalBindingsList()) {
-      Binding argument = Binding.fromPb(numberArg);
+      Binding argument = Binding.fromPb(null, numberArg);
       builder.positionalBindings.add(argument);
     }
     return builder.build();

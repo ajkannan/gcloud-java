@@ -79,7 +79,7 @@ public final class RawValue extends Value<com.google.datastore.v1beta3.Value> {
 
   static Builder builder(com.google.datastore.v1beta3.Value valuePb) {
     Builder builder = new Builder();
-    builder.indexed(!valuePb.getExcludeFromIndexes());
+    builder.excludeFromIndexes(valuePb.getExcludeFromIndexes());
     builder.meaning(valuePb.getMeaning());
     builder.set(valuePb);
     return builder;

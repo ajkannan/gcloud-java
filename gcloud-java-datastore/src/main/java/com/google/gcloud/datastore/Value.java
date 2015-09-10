@@ -38,7 +38,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
 
 
   private final transient ValueType valueType;
-  private final transient Boolean indexed;
+  private final transient Boolean excludeFromIndexes;
   private final transient Integer meaning;
   private final transient V value;
 
@@ -56,7 +56,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
     @Override
     public final B fromProto(com.google.datastore.v1beta3.Value proto) {
       B builder = newBuilder(getValue(proto));
-      builder.indexed(!proto.getExcludeFromIndexes());
+      builder.excludeFromIndexes(proto.getExcludeFromIndexes());
       builder.meaning(proto.getMeaning());
       return builder;
     }
@@ -67,7 +67,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
       com.google.datastore.v1beta3.Value.Builder builder = 
           com.google.datastore.v1beta3.Value.newBuilder();
       if (value.hasIndexed()) {
-        builder.setExcludeFromIndexes(!value.indexed());
+        builder.setExcludeFromIndexes(value.excludeFromIndexes());
       }
       if (value.hasMeaning()) {
         builder.setMeaning(value.meaning());
@@ -86,7 +86,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
       implements ValueBuilder<V, P, B> {
 
     private final ValueType valueType;
-    private Boolean indexed;
+    private Boolean excludeFromIndexes;
     private Integer meaning;
     private V value;
 
@@ -101,20 +101,20 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
 
     @Override
     public B mergeFrom(P other) {
-      indexed = other.indexed();
+      excludeFromIndexes = other.excludeFromIndexes();
       meaning = other.meaning();
       set(other.get());
       return self();
     }
 
     @Override
-    public Boolean getIndexed() {
-      return indexed;
+    public Boolean getExcludeFromIndexes() {
+      return excludeFromIndexes;
     }
 
     @Override
-    public B indexed(boolean indexed) {
-      this.indexed = indexed;
+    public B excludeFromIndexes(boolean excludeFromIndexes) {
+      this.excludeFromIndexes = excludeFromIndexes;
       return self();
     }
 
@@ -151,7 +151,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
 
   <P extends Value<V>, B extends BaseBuilder<V, P, B>> Value(ValueBuilder<V, P, B> builder) {
     valueType = builder.getValueType();
-    indexed = builder.getIndexed();
+    excludeFromIndexes = builder.getExcludeFromIndexes();
     meaning = builder.getMeaning();
     value = builder.get();
   }
@@ -161,11 +161,11 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
   }
 
   public final boolean hasIndexed() {
-    return indexed != null;
+    return excludeFromIndexes != null;
   }
 
-  public final Boolean indexed() {
-    return indexed;
+  public final Boolean excludeFromIndexes() {
+    return excludeFromIndexes;
   }
 
   @Deprecated
@@ -186,7 +186,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
 
   @Override
   public int hashCode() {
-    return Objects.hash(valueType, indexed, meaning, value);
+    return Objects.hash(valueType, excludeFromIndexes, meaning, value);
   }
 
   @Override
@@ -200,7 +200,7 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
     }
     Value<V> other = (Value<V>) obj;
     return Objects.equals(valueType, other.valueType)
-        && Objects.equals(indexed, other.indexed)
+        && Objects.equals(excludeFromIndexes, other.excludeFromIndexes)
         && Objects.equals(meaning, other.meaning)
         && Objects.equals(value, other.value);
   }
