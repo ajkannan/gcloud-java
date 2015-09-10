@@ -56,19 +56,16 @@ public abstract class Value<V> extends Serializable<com.google.datastore.v1beta3
     @Override
     public final B fromProto(com.google.datastore.v1beta3.Value proto) {
       B builder = newBuilder(getValue(proto));
-      if (proto.hasExcludeFromIndexes()) {
-        builder.indexed(!proto.getExcludeFromIndexes());
-      }
-      if (proto.hasMeaning()) {
-        builder.meaning(proto.getMeaning());
-      }
+      builder.indexed(!proto.getExcludeFromIndexes());
+      builder.meaning(proto.getMeaning());
       return builder;
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public final com.google.datastore.v1beta3.Value toProto(P value) {
-      com.google.datastore.v1beta3.Value.Builder builder = com.google.datastore.v1beta3.Value.newBuilder();
+      com.google.datastore.v1beta3.Value.Builder builder = 
+          com.google.datastore.v1beta3.Value.newBuilder();
       if (value.hasIndexed()) {
         builder.setExcludeFromIndexes(!value.indexed());
       }

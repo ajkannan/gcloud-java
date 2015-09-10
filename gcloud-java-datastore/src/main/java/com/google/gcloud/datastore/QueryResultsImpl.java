@@ -44,7 +44,8 @@ class QueryResultsImpl<T> extends AbstractIterator<T> implements QueryResults<T>
     this.readOptionsPb = readOptionsPb;
     this.query = query;
     queryResultType = query.type();
-    com.google.datastore.v1beta3.PartitionId.Builder pbBuilder = com.google.datastore.v1beta3.PartitionId.newBuilder();
+    com.google.datastore.v1beta3.PartitionId.Builder pbBuilder = 
+        com.google.datastore.v1beta3.PartitionId.newBuilder();
     pbBuilder.setProjectId(datastore.options().projectId());
     if (query.namespace() != null) {
       pbBuilder.setNamespaceId(query.namespace());
@@ -56,7 +57,8 @@ class QueryResultsImpl<T> extends AbstractIterator<T> implements QueryResults<T>
   }
 
   private void sendRequest() {
-    com.google.datastore.v1beta3.RunQueryRequest.Builder requestPb = com.google.datastore.v1beta3.RunQueryRequest.newBuilder();
+    com.google.datastore.v1beta3.RunQueryRequest.Builder requestPb = 
+        com.google.datastore.v1beta3.RunQueryRequest.newBuilder();
     if (readOptionsPb != null) {
       requestPb.setReadOptions(readOptionsPb);
     }
@@ -66,7 +68,7 @@ class QueryResultsImpl<T> extends AbstractIterator<T> implements QueryResults<T>
     lastBatch = queryResultBatchPb.getMoreResults() != MoreResultsType.NOT_FINISHED;
     entityResultPbIter = queryResultBatchPb.getEntityResultsList().iterator();
     // cursor = resultPb.getSkippedCursor(); // available in v1beta3, use startCursor if not skipped
-    actualResultType = ResultType.fromPb(queryResultBatchPb.getEntityResultsType());
+    actualResultType = ResultType.fromPb(queryResultBatchPb.getEntityResultType());
     if (Objects.equals(queryResultType, ResultType.PROJECTION_ENTITY)) {
       // projection entity can represent all type of results
       actualResultType = ResultType.PROJECTION_ENTITY;

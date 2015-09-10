@@ -36,7 +36,8 @@ public final class RawValue extends Value<com.google.datastore.v1beta3.Value> {
         }
 
         @Override
-        protected com.google.datastore.v1beta3.Value getValue(com.google.datastore.v1beta3.Value from) {
+        protected com.google.datastore.v1beta3.Value getValue(
+            com.google.datastore.v1beta3.Value from) {
           return from;
         }
 
@@ -78,12 +79,8 @@ public final class RawValue extends Value<com.google.datastore.v1beta3.Value> {
 
   static Builder builder(com.google.datastore.v1beta3.Value valuePb) {
     Builder builder = new Builder();
-    if (valuePb.hasExcludeFromIndexes()) {
-      builder.indexed(!valuePb.getExcludeFromIndexes());
-    }
-    if (valuePb.hasMeaning()) {
-      builder.meaning(valuePb.getMeaning());
-    }
+    builder.indexed(!valuePb.getExcludeFromIndexes());
+    builder.meaning(valuePb.getMeaning());
     builder.set(valuePb);
     return builder;
   }

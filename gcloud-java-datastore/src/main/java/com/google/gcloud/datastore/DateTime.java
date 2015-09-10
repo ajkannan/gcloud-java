@@ -18,7 +18,6 @@ package com.google.gcloud.datastore;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.datastore.v1beta3.Value;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.joda.time.format.ISODateTimeFormat;
@@ -33,7 +32,7 @@ import java.util.Date;
  * @see <a href="https://cloud.google.com/datastore/docs/concepts/entities">Google Cloud Datastore
  *     Entities, Properties, and Keys</a>
  */
-public final class DateTime extends Serializable<Value>
+public final class DateTime extends Serializable<com.google.datastore.v1beta3.Value>
     implements Comparable<DateTime> {
 
   private static final long serialVersionUID = 7343324797621228378L;
@@ -97,12 +96,12 @@ public final class DateTime extends Serializable<Value>
   }
 
   @Override
-  protected Value toPb() {
-    return Value.newBuilder().setIntegerValue(timestampMicroseconds).build();
+  protected com.google.datastore.v1beta3.Value toPb() {
+    return com.google.datastore.v1beta3.Value.newBuilder().setIntegerValue(timestampMicroseconds).build();
   }
 
   @Override
   protected Object fromPb(byte[] bytesPb) throws InvalidProtocolBufferException {
-    return new DateTime(Value.parseFrom(bytesPb).getIntegerValue());
+    return new DateTime(com.google.datastore.v1beta3.Value.parseFrom(bytesPb).getIntegerValue());
   }
 }

@@ -152,7 +152,8 @@ public final class Key extends IncompleteKey {
   public static Key fromUrlSafe(String urlSafe) {
     try {
       String utf8Str = URLDecoder.decode(urlSafe, UTF_8.name());
-      com.google.datastore.v1beta3.Key.Builder builder = com.google.datastore.v1beta3.Key.newBuilder();
+      com.google.datastore.v1beta3.Key.Builder builder = 
+          com.google.datastore.v1beta3.Key.newBuilder();
       TextFormat.merge(utf8Str, builder);
       return fromPb(builder.build());
     } catch (UnsupportedEncodingException e) {

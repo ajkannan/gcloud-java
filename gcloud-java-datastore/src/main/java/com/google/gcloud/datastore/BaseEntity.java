@@ -47,7 +47,8 @@ import java.util.Set;
  * @see <a href="https://cloud.google.com/datastore/docs/concepts/entities">Google Cloud Datastore
  *     Entities, Properties, and Keys</a>
  */
-public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<com.google.datastore.v1beta3.Entity> {
+public abstract class BaseEntity<K extends IncompleteKey> 
+    extends Serializable<com.google.datastore.v1beta3.Entity> {
 
   private static final long serialVersionUID = 8175618724683792766L;
 
@@ -91,7 +92,8 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
     @SuppressWarnings("unchecked")
     protected B fill(com.google.datastore.v1beta3.Entity entityPb) {
       Map<String, Value<?>> copiedProperties = Maps.newHashMap();
-      for (Map.Entry<String, com.google.datastore.v1beta3.Value> property : entityPb.getProperties().entrySet()) {
+      for (Map.Entry<String, com.google.datastore.v1beta3.Value> property
+          : entityPb.getProperties().entrySet()) {
         copiedProperties.put(property.getKey(), Value.fromPb(property.getValue()));
       }
       properties(copiedProperties);
@@ -384,12 +386,12 @@ public abstract class BaseEntity<K extends IncompleteKey> extends Serializable<c
 
   @Override
   protected final com.google.datastore.v1beta3.Entity toPb() {
-    com.google.datastore.v1beta3.Entity.Builder entityPb = com.google.datastore.v1beta3.Entity.newBuilder();
-    Map<String, com.google.datastore.v1beta3.Value> propertiesPb = new HashMap<String, com.google.datastore.v1beta3.Value>();
+    com.google.datastore.v1beta3.Entity.Builder entityPb = 
+        com.google.datastore.v1beta3.Entity.newBuilder();
+    Map<String, com.google.datastore.v1beta3.Value> propertiesPb = entityPb.getMutableProperties();
     for (Map.Entry<String, Value<?>> entry : properties.entrySet()) {
       propertiesPb.put(entry.getKey(), entry.getValue().toPb());
     }
-    entityPb.putAllProperties(propertiesPb);
 
     if (key != null) {
       entityPb.setKey(key.toPb());

@@ -64,8 +64,8 @@ public class DefaultDatastoreRpc implements DatastoreRpc {
   public DefaultDatastoreRpc(DatastoreOptions options) {
     client = DatastoreFactory.get().create(
         new Builder()
-            .dataset(options.projectId())
-            .host(options.host())
+            .projectId(options.projectId())
+            //.host(options.host())
             .initializer(options.httpRequestInitializer())
             .build());
   }

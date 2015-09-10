@@ -86,7 +86,8 @@ public final class PathElement extends Serializable<com.google.datastore.v1beta3
 
   @Override
   protected com.google.datastore.v1beta3.Key.PathElement toPb() {
-    com.google.datastore.v1beta3.Key.PathElement.Builder pathElementPb = com.google.datastore.v1beta3.Key.PathElement.newBuilder();
+    com.google.datastore.v1beta3.Key.PathElement.Builder pathElementPb = 
+        com.google.datastore.v1beta3.Key.PathElement.newBuilder();
     pathElementPb.setKind(kind);
     if (id != null) {
       pathElementPb.setId(id);
@@ -103,10 +104,12 @@ public final class PathElement extends Serializable<com.google.datastore.v1beta3
 
   static PathElement fromPb(com.google.datastore.v1beta3.Key.PathElement pathElementPb) {
     String kind = pathElementPb.getKind();
-    if (pathElementPb.hasId()) {
+    if (pathElementPb.getIdTypeCase() == 
+        com.google.datastore.v1beta3.Key.PathElement.IdTypeCase.ID) {
       return of(kind, pathElementPb.getId());
     }
-    if (pathElementPb.hasName()) {
+    if (pathElementPb.getIdTypeCase() == 
+        com.google.datastore.v1beta3.Key.PathElement.IdTypeCase.NAME) {
       return of(kind, pathElementPb.getName());
     }
     return of(kind);

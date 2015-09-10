@@ -39,10 +39,11 @@ class BatchImpl extends BaseDatastoreBatchWriter implements Batch {
 
     @Override
     public List<Key> generatedKeys() {
-      return Lists.transform(response.getMutationResult().getKeyList(),
-          new Function<com.google.datastore.v1beta3.Key, Key>() {
-            @Override public Key apply(com.google.datastore.v1beta3.Key keyPb) {
-              return Key.fromPb(keyPb);
+      return Lists.transform(response.getMutationResultsList(),
+          new Function<com.google.datastore.v1beta3.MutationResult, Key>() {
+            @Override 
+            public Key apply(com.google.datastore.v1beta3.MutationResult mutationResultPb) {
+              return Key.fromPb(mutationResultPb.getKey());
             }
           });
     }
@@ -62,13 +63,13 @@ class BatchImpl extends BaseDatastoreBatchWriter implements Batch {
   @Override
   public Batch.Response submit() {
     validateActive();
-    com.google.datastore.v1beta3.Mutation.Builder mutationPb = toMutationPb();
-    if (force) {
-      mutationPb.setForce(force);
-    }
-    com.google.datastore.v1beta3.CommitRequest.Builder requestPb = com.google.datastore.v1beta3.CommitRequest.newBuilder();
+    List<com.google.datastore.v1beta3.Mutation.Builder> mutationPbList = toMutationPb();
+    com.google.datastore.v1beta3.CommitRequest.Builder requestPb = 
+        com.google.datastore.v1beta3.CommitRequest.newBuilder();
     requestPb.setMode(com.google.datastore.v1beta3.CommitRequest.Mode.NON_TRANSACTIONAL);
-    requestPb.setMutation(mutationPb);
+    for (com.google.datastore.v1beta3.Mutation.Builder mutationPb : mutationPbList) {
+      requestPb.addMutations(mutationPb.build());
+    }
     com.google.datastore.v1beta3.CommitResponse responsePb = datastore.commit(requestPb.build());
     deactivate();
     return new ResponseImpl(responsePb);

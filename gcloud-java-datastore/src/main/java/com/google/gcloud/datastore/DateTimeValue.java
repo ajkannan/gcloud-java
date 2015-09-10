@@ -39,12 +39,18 @@ public final class DateTimeValue extends Value<DateTime> {
 
         @Override
         protected DateTime getValue(com.google.datastore.v1beta3.Value from) {
-          return new DateTime(from.getTimestampValue());
+          long seconds = from.getTimestampValue().getSeconds();
+          int nanos = from.getTimestampValue().getNanos();
+          return new DateTime(seconds * 1000000 + nanos / 1000);
         }
 
         @Override
         protected void setValue(DateTimeValue from, com.google.datastore.v1beta3.Value.Builder to) {
-          to.setTimestampValue(from.get().timestampMicroseconds());
+          long microseconds = from.get().timestampMicroseconds();
+          long seconds = microseconds / 1000000;
+          int nanos = (int) (microseconds % 1000) * 1000;
+          to.setTimestampValue(com.google.protobuf.Timestamp.newBuilder()
+              .setSeconds(seconds).setNanos(nanos));
         }
       };
 

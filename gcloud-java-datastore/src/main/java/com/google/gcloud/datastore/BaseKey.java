@@ -173,16 +173,15 @@ abstract class BaseKey extends Serializable<com.google.datastore.v1beta3.Key> {
   @Override
   protected com.google.datastore.v1beta3.Key toPb() {
     com.google.datastore.v1beta3.Key.Builder keyPb = com.google.datastore.v1beta3.Key.newBuilder();
-    com.google.datastore.v1beta3.PartitionId.Builder partitionIdPb = com.google.datastore.v1beta3.PartitionId.newBuilder();
+    com.google.datastore.v1beta3.PartitionId.Builder partitionIdPb = 
+        com.google.datastore.v1beta3.PartitionId.newBuilder();
     if (projectId != null) {
       partitionIdPb.setProjectId(projectId);
     }
     if (namespace != null) {
       partitionIdPb.setNamespaceId(namespace);
     }
-    if (partitionIdPb.hasProjectId() || partitionIdPb.hasNamespaceId()) {
-      keyPb.setPartitionId(partitionIdPb.build());
-    }
+    keyPb.setPartitionId(partitionIdPb.build());
     for (PathElement pathEntry : path) {
       keyPb.addPath(pathEntry.toPb());
     }

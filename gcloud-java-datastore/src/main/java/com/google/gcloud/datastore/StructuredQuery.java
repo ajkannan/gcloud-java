@@ -105,7 +105,7 @@ public class StructuredQuery<V> extends Query<V> {
     protected abstract com.google.datastore.v1beta3.Filter toPb();
 
     static Filter fromPb(com.google.datastore.v1beta3.Filter filterPb) {
-      if (filterPb.hasCompositeFilter()) {
+      if (filterPb.getFilterTypeCase() == com.google.datastore.v1beta3.Filter.FilterTypeCase.COMPOSITE_FILTER) {
         return CompositeFilter.fromPb(filterPb.getCompositeFilter());
       }
       return PropertyFilter.fromPb(filterPb.getPropertyFilter());
@@ -183,8 +183,10 @@ public class StructuredQuery<V> extends Query<V> {
 
     @Override
     protected com.google.datastore.v1beta3.Filter toPb() {
-      com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
-      com.google.datastore.v1beta3.CompositeFilter.Builder compositeFilterPb = filterPb.getCompositeFilterBuilder();
+      com.google.datastore.v1beta3.Filter.Builder filterPb = 
+          com.google.datastore.v1beta3.Filter.newBuilder();
+      com.google.datastore.v1beta3.CompositeFilter.Builder compositeFilterPb = 
+          filterPb.getCompositeFilterBuilder();
       compositeFilterPb.setOp(operator.toPb());
       for (Filter filter : filters) {
         compositeFilterPb.addFilters(filter.toPb());
@@ -224,7 +226,8 @@ public class StructuredQuery<V> extends Query<V> {
       this.value = checkNotNull(value);
     }
 
-    public static PropertyFilter fromPb(com.google.datastore.v1beta3.PropertyFilter propertyFilterPb) {
+    public static PropertyFilter fromPb(
+        com.google.datastore.v1beta3.PropertyFilter propertyFilterPb) {
       String property = propertyFilterPb.getProperty().getName();
       Operator operator = Operator.fromPb(propertyFilterPb.getOp());
       Value<?> value = Value.fromPb(propertyFilterPb.getValue());
@@ -429,8 +432,10 @@ public class StructuredQuery<V> extends Query<V> {
 
     @Override
     protected com.google.datastore.v1beta3.Filter toPb() {
-      com.google.datastore.v1beta3.Filter.Builder filterPb = com.google.datastore.v1beta3.Filter.newBuilder();
-      com.google.datastore.v1beta3.PropertyFilter.Builder propertyFilterPb = filterPb.getPropertyFilterBuilder();
+      com.google.datastore.v1beta3.Filter.Builder filterPb = 
+          com.google.datastore.v1beta3.Filter.newBuilder();
+      com.google.datastore.v1beta3.PropertyFilter.Builder propertyFilterPb = 
+          filterPb.getPropertyFilterBuilder();
       propertyFilterPb.getPropertyBuilder().setName(property);
       propertyFilterPb.setOp(operator.toPb());
       if (value != null) {
@@ -494,7 +499,9 @@ public class StructuredQuery<V> extends Query<V> {
     com.google.datastore.v1beta3.PropertyOrder toPb() {
       return com.google.datastore.v1beta3.PropertyOrder.newBuilder()
           .setDirection(direction.toPb())
-          .setProperty(com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(property).build())
+          .setProperty(com.google.datastore.v1beta3.PropertyReference.newBuilder()
+              .setName(property)
+              .build())
           .build();
     }
 
@@ -561,10 +568,6 @@ public class StructuredQuery<V> extends Query<V> {
     }
 
     public static Projection property(String property) {
-      return new Projection(null, property);
-    }
-
-    public static Projection first(String property) {
       return new Projection(property);
     }
   }
@@ -684,17 +687,11 @@ public class StructuredQuery<V> extends Query<V> {
       if (queryPb.getKindCount() > 0) {
         kind(queryPb.getKind(0).getName());
       }
-      if (queryPb.hasStartCursor()) {
-        startCursor(new Cursor(queryPb.getStartCursor()));
-      }
-      if (queryPb.hasEndCursor()) {
-        endCursor(new Cursor(queryPb.getEndCursor()));
-      }
-      if (queryPb.hasOffset()) {
-        offset(queryPb.getOffset());
-      }
+      startCursor(new Cursor(queryPb.getStartCursor()));
+      endCursor(new Cursor(queryPb.getEndCursor()));
+      offset(queryPb.getOffset());
       if (queryPb.hasLimit()) {
-        limit(queryPb.getLimit());
+        limit(queryPb.getLimit().getValue());
       }
       if (queryPb.hasFilter()) {
         filter(Filter.fromPb(queryPb.getFilter()));
@@ -705,7 +702,7 @@ public class StructuredQuery<V> extends Query<V> {
       for (com.google.datastore.v1beta3.Projection projectionPb : queryPb.getProjectionList()) {
         addProjection(Projection.fromPb(projectionPb));
       }
-      for (com.google.datastore.v1beta3.PropertyReference groupByPb : queryPb.getGroupByList()) {
+      for (com.google.datastore.v1beta3.PropertyReference groupByPb : queryPb.getDistinctOnList()) {
         addGroupBy(groupByPb.getName());
       }
       return self();
@@ -903,7 +900,8 @@ public class StructuredQuery<V> extends Query<V> {
 
   @Override
   protected com.google.datastore.v1beta3.Query toPb() {
-    com.google.datastore.v1beta3.Query.Builder queryPb = com.google.datastore.v1beta3.Query.newBuilder();
+    com.google.datastore.v1beta3.Query.Builder queryPb = 
+        com.google.datastore.v1beta3.Query.newBuilder();
     if (kind != null) {
       queryPb.addKindBuilder().setName(kind);
     }
@@ -917,7 +915,7 @@ public class StructuredQuery<V> extends Query<V> {
       queryPb.setOffset(offset);
     }
     if (limit != null) {
-      queryPb.setLimit(limit);
+      queryPb.setLimit(com.google.protobuf.Int32Value.newBuilder().setValue(limit));
     }
     if (filter != null) {
       queryPb.setFilter(filter.toPb());
@@ -926,7 +924,8 @@ public class StructuredQuery<V> extends Query<V> {
       queryPb.addOrder(value.toPb());
     }
     for (String value : groupBy) {
-      queryPb.addGroupBy(com.google.datastore.v1beta3.PropertyReference.newBuilder().setName(value).build());
+      queryPb.addDistinctOn(com.google.datastore.v1beta3.PropertyReference.newBuilder()
+          .setName(value).build());
     }
     for (Projection value : projection) {
       queryPb.addProjection(value.toPb());
