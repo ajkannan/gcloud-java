@@ -20,7 +20,6 @@ import static com.google.gcloud.datastore.Validator.validateDatabase;
 import static com.google.gcloud.datastore.Validator.validateKind;
 import static com.google.gcloud.datastore.Validator.validateNamespace;
 
-import com.google.api.services.datastore.DatastoreV1;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
@@ -31,7 +30,7 @@ import java.util.Objects;
 /**
  * Base class for keys.
  */
-abstract class BaseKey extends Serializable<DatastoreV1.Key> {
+abstract class BaseKey extends Serializable<com.google.datastore.v1beta3.Key> {
 
   private static final long serialVersionUID = -4671243265877410635L;
 
@@ -172,20 +171,19 @@ abstract class BaseKey extends Serializable<DatastoreV1.Key> {
   }
 
   @Override
-  protected DatastoreV1.Key toPb() {
-    DatastoreV1.Key.Builder keyPb = DatastoreV1.Key.newBuilder();
-    DatastoreV1.PartitionId.Builder partitionIdPb = DatastoreV1.PartitionId.newBuilder();
+  protected com.google.datastore.v1beta3.Key toPb() {
+    com.google.datastore.v1beta3.Key.Builder keyPb = com.google.datastore.v1beta3.Key.newBuilder();
+    com.google.datastore.v1beta3.PartitionId.Builder partitionIdPb = 
+        com.google.datastore.v1beta3.PartitionId.newBuilder();
     if (projectId != null) {
-      partitionIdPb.setDatasetId(projectId);
+      partitionIdPb.setProjectId(projectId);
     }
     if (namespace != null) {
-      partitionIdPb.setNamespace(namespace);
+      partitionIdPb.setNamespaceId(namespace);
     }
-    if (partitionIdPb.hasDatasetId() || partitionIdPb.hasNamespace()) {
-      keyPb.setPartitionId(partitionIdPb.build());
-    }
+    keyPb.setPartitionId(partitionIdPb.build());
     for (PathElement pathEntry : path) {
-      keyPb.addPathElement(pathEntry.toPb());
+      keyPb.addPath(pathEntry.toPb());
     }
     return keyPb.build();
   }

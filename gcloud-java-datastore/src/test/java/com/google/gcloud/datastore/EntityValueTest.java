@@ -39,24 +39,24 @@ public class EntityValueTest {
     EntityValue value = EntityValue.of(CONTENT);
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertFalse(value.excludeFromIndexes());
     assertFalse(value.hasMeaning());
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testIndexedNotAllowed() {
-    EntityValue.builder(CONTENT).indexed(true);
+    EntityValue.builder(CONTENT).excludeFromIndexes(false);
   }
 
   @SuppressWarnings("deprecation")
   @Test
   public void testBuilder() throws Exception {
     EntityValue.Builder builder = EntityValue.builder(CONTENT);
-    EntityValue value = builder.meaning(1).indexed(false).build();
+    EntityValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }

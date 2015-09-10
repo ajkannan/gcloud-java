@@ -45,11 +45,11 @@ public class KeyValueTest {
   @Test
   public void testBuilder() throws Exception {
     KeyValue.Builder builder = KeyValue.builder(CONTENT);
-    KeyValue value = builder.meaning(1).indexed(false).build();
+    KeyValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }

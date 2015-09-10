@@ -16,11 +16,11 @@
 
 package com.google.gcloud.datastore;
 
-import com.google.api.services.datastore.DatastoreV1;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -199,24 +199,26 @@ public abstract class BaseDatastoreBatchWriter implements DatastoreBatchWriter {
     return DatastoreException.throwInvalidRequest(String.format(msg, params));
   }
 
-  protected DatastoreV1.Mutation.Builder toMutationPb() {
-    DatastoreV1.Mutation.Builder mutationPb = DatastoreV1.Mutation.newBuilder();
-    for (FullEntity<IncompleteKey> entity : toAddAutoId()) {
-      mutationPb.addInsertAutoId(entity.toPb());
-    }
+  protected List<com.google.datastore.v1beta3.Mutation.Builder> toMutationPb() {
+    List<com.google.datastore.v1beta3.Mutation.Builder> mutationPbList = 
+        new ArrayList<com.google.datastore.v1beta3.Mutation.Builder>();
     for (FullEntity<Key> entity : toAdd().values()) {
-      mutationPb.addInsert(entity.toPb());
+      mutationPbList.add(
+          com.google.datastore.v1beta3.Mutation.newBuilder().setInsert(entity.toPb()));
     }
     for (FullEntity<Key> entity : toUpdate().values()) {
-      mutationPb.addUpdate(entity.toPb());
+      mutationPbList.add(
+          com.google.datastore.v1beta3.Mutation.newBuilder().setUpdate(entity.toPb()));
     }
     for (FullEntity<Key> entity : toPut().values()) {
-      mutationPb.addUpsert(entity.toPb());
+      mutationPbList.add(
+          com.google.datastore.v1beta3.Mutation.newBuilder().setUpsert(entity.toPb()));
     }
     for (Key key : toDelete()) {
-      mutationPb.addDelete(key.toPb());
+      mutationPbList.add(
+          com.google.datastore.v1beta3.Mutation.newBuilder().setDelete(key.toPb()));
     }
-    return mutationPb;
+    return mutationPbList;
   }
 
   protected abstract Datastore datastore();

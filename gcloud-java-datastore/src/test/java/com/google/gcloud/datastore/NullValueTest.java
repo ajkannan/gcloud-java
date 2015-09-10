@@ -44,11 +44,11 @@ public class NullValueTest {
   @Test
   public void testBuilder() throws Exception {
     NullValue.Builder builder = NullValue.builder();
-    NullValue value = builder.meaning(1).indexed(false).build();
+    NullValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertNull(value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }

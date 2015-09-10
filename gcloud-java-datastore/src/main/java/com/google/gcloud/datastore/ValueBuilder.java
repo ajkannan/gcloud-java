@@ -27,7 +27,7 @@ public interface ValueBuilder<V, P extends Value<V>, B extends ValueBuilder<V, P
 
   Boolean getIndexed();
 
-  B indexed(boolean indexed);
+  B excludeFromIndexes(boolean excludeFromIndexes);
 
   Integer getMeaning();
 

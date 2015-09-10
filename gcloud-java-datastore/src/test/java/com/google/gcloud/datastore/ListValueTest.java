@@ -47,7 +47,7 @@ public class ListValueTest {
 
   @Test(expected = DatastoreException.class)
   public void testIndexedCannotBeSpecified() {
-    ListValue.builder().indexed(false);
+    ListValue.builder().excludeFromIndexes(true);
   }
 
   @SuppressWarnings("deprecation")

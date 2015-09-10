@@ -16,7 +16,6 @@
 
 package com.google.gcloud.datastore;
 
-import com.google.api.services.datastore.DatastoreV1;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.gcloud.datastore.BatchOption.ForceWrites;
@@ -32,18 +31,19 @@ class BatchImpl extends BaseDatastoreBatchWriter implements Batch {
 
   static class ResponseImpl implements Batch.Response {
 
-    private final DatastoreV1.CommitResponse response;
+    private final com.google.datastore.v1beta3.CommitResponse response;
 
-    ResponseImpl(DatastoreV1.CommitResponse response) {
+    ResponseImpl(com.google.datastore.v1beta3.CommitResponse response) {
       this.response = response;
     }
 
     @Override
     public List<Key> generatedKeys() {
-      return Lists.transform(response.getMutationResult().getInsertAutoIdKeyList(),
-          new Function<DatastoreV1.Key, Key>() {
-            @Override public Key apply(DatastoreV1.Key keyPb) {
-              return Key.fromPb(keyPb);
+      return Lists.transform(response.getMutationResultsList(),
+          new Function<com.google.datastore.v1beta3.MutationResult, Key>() {
+            @Override 
+            public Key apply(com.google.datastore.v1beta3.MutationResult mutationResultPb) {
+              return Key.fromPb(mutationResultPb.getKey());
             }
           });
     }
@@ -63,14 +63,14 @@ class BatchImpl extends BaseDatastoreBatchWriter implements Batch {
   @Override
   public Batch.Response submit() {
     validateActive();
-    DatastoreV1.Mutation.Builder mutationPb = toMutationPb();
-    if (force) {
-      mutationPb.setForce(force);
+    List<com.google.datastore.v1beta3.Mutation.Builder> mutationPbList = toMutationPb();
+    com.google.datastore.v1beta3.CommitRequest.Builder requestPb = 
+        com.google.datastore.v1beta3.CommitRequest.newBuilder();
+    requestPb.setMode(com.google.datastore.v1beta3.CommitRequest.Mode.NON_TRANSACTIONAL);
+    for (com.google.datastore.v1beta3.Mutation.Builder mutationPb : mutationPbList) {
+      requestPb.addMutations(mutationPb.build());
     }
-    DatastoreV1.CommitRequest.Builder requestPb = DatastoreV1.CommitRequest.newBuilder();
-    requestPb.setMode(DatastoreV1.CommitRequest.Mode.NON_TRANSACTIONAL);
-    requestPb.setMutation(mutationPb);
-    DatastoreV1.CommitResponse responsePb = datastore.commit(requestPb.build());
+    com.google.datastore.v1beta3.CommitResponse responsePb = datastore.commit(requestPb.build());
     deactivate();
     return new ResponseImpl(responsePb);
   }

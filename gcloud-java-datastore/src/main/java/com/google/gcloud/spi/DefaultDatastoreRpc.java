@@ -16,22 +16,22 @@
 
 package com.google.gcloud.spi;
 
-import com.google.api.services.datastore.DatastoreV1.AllocateIdsRequest;
-import com.google.api.services.datastore.DatastoreV1.AllocateIdsResponse;
-import com.google.api.services.datastore.DatastoreV1.BeginTransactionRequest;
-import com.google.api.services.datastore.DatastoreV1.BeginTransactionResponse;
-import com.google.api.services.datastore.DatastoreV1.CommitRequest;
-import com.google.api.services.datastore.DatastoreV1.CommitResponse;
-import com.google.api.services.datastore.DatastoreV1.LookupRequest;
-import com.google.api.services.datastore.DatastoreV1.LookupResponse;
-import com.google.api.services.datastore.DatastoreV1.RollbackRequest;
-import com.google.api.services.datastore.DatastoreV1.RollbackResponse;
-import com.google.api.services.datastore.DatastoreV1.RunQueryRequest;
-import com.google.api.services.datastore.DatastoreV1.RunQueryResponse;
-import com.google.api.services.datastore.client.Datastore;
-import com.google.api.services.datastore.client.DatastoreException;
-import com.google.api.services.datastore.client.DatastoreFactory;
-import com.google.api.services.datastore.client.DatastoreOptions.Builder;
+import com.google.datastore.v1beta3.AllocateIdsRequest;
+import com.google.datastore.v1beta3.AllocateIdsResponse;
+import com.google.datastore.v1beta3.BeginTransactionRequest;
+import com.google.datastore.v1beta3.BeginTransactionResponse;
+import com.google.datastore.v1beta3.CommitRequest;
+import com.google.datastore.v1beta3.CommitResponse;
+import com.google.datastore.v1beta3.LookupRequest;
+import com.google.datastore.v1beta3.LookupResponse;
+import com.google.datastore.v1beta3.RollbackRequest;
+import com.google.datastore.v1beta3.RollbackResponse;
+import com.google.datastore.v1beta3.RunQueryRequest;
+import com.google.datastore.v1beta3.RunQueryResponse;
+import com.google.datastore.v1beta3.client.Datastore;
+import com.google.datastore.v1beta3.client.DatastoreException;
+import com.google.datastore.v1beta3.client.DatastoreFactory;
+import com.google.datastore.v1beta3.client.DatastoreOptions.Builder;
 import com.google.common.collect.ImmutableMap;
 import com.google.gcloud.datastore.DatastoreOptions;
 import com.google.gcloud.spi.DatastoreRpc.DatastoreRpcException.Reason;
@@ -64,8 +64,8 @@ public class DefaultDatastoreRpc implements DatastoreRpc {
   public DefaultDatastoreRpc(DatastoreOptions options) {
     client = DatastoreFactory.get().create(
         new Builder()
-            .dataset(options.projectId())
-            .host(options.host())
+            .projectId(options.projectId())
+            //.host(options.host())
             .initializer(options.httpRequestInitializer())
             .build());
   }
@@ -89,7 +89,7 @@ public class DefaultDatastoreRpc implements DatastoreRpc {
     }
     return reason != null
         ? new DatastoreRpcException(reason)
-        : new DatastoreRpcException("Unknown", exception.getCode(), false, message);
+        : new DatastoreRpcException("Unknown", exception.getCode().ordinal(), false, message);
   }
 
   @Override

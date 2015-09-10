@@ -16,9 +16,8 @@
 
 package com.google.gcloud.datastore;
 
-import static com.google.api.services.datastore.DatastoreV1.Value.ENTITY_VALUE_FIELD_NUMBER;
+import static com.google.datastore.v1beta3.Value.ENTITY_VALUE_FIELD_NUMBER;
 
-import com.google.api.services.datastore.DatastoreV1;
 import com.google.common.base.Preconditions;
 
 public class EntityValue extends Value<FullEntity<?>> {
@@ -41,12 +40,12 @@ public class EntityValue extends Value<FullEntity<?>> {
         }
 
         @Override
-        protected FullEntity<?> getValue(DatastoreV1.Value from) {
+        protected FullEntity<?> getValue(com.google.datastore.v1beta3.Value from) {
           return FullEntity.fromPb(from.getEntityValue());
         }
 
         @Override
-        protected void setValue(EntityValue from, DatastoreV1.Value.Builder to) {
+        protected void setValue(EntityValue from, com.google.datastore.v1beta3.Value.Builder to) {
           to.setEntityValue(from.get().toPb());
         }
       };
@@ -58,10 +57,10 @@ public class EntityValue extends Value<FullEntity<?>> {
     }
 
     @Override
-    public Builder indexed(boolean indexed) {
+    public Builder excludeFromIndexes(boolean excludeFromIndexes) {
       // see issue #25
-      Preconditions.checkArgument(!indexed, "EntityValue can't be indexed");
-      return super.indexed(indexed);
+      Preconditions.checkArgument(excludeFromIndexes, "EntityValue can't be indexed");
+      return super.excludeFromIndexes(excludeFromIndexes);
     }
 
     @Override
@@ -88,6 +87,6 @@ public class EntityValue extends Value<FullEntity<?>> {
   }
 
   public static Builder builder(FullEntity<?> entity) {
-    return new Builder().set(entity).indexed(false);
+    return new Builder().set(entity).excludeFromIndexes(true);
   }
 }

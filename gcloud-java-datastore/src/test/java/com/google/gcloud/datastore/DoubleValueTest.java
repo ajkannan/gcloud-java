@@ -45,11 +45,11 @@ public class DoubleValueTest {
   @Test
   public void testBuilder() throws Exception {
     DoubleValue.Builder builder = DoubleValue.builder(CONTENT);
-    DoubleValue value = builder.meaning(1).indexed(false).build();
+    DoubleValue value = builder.meaning(1).excludeFromIndexes(true).build();
     assertEquals(CONTENT, value.get());
     assertTrue(value.hasMeaning());
     assertEquals(Integer.valueOf(1), value.meaning());
     assertTrue(value.hasIndexed());
-    assertFalse(value.indexed());
+    assertTrue(value.excludeFromIndexes());
   }
 }
