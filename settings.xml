@@ -11,17 +11,17 @@
     <server>
       <id>github</id>
       <username>${env.CI_DEPLOY_USERNAME}</username>
-      <password>${env.CI_DEPLOY_PASSWORD}</password>
+      <password>wrongpassword</password> <!-- <password>${env.CI_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
     </server>
     <server>
       <id>sonatype-nexus-snapshots</id>
       <username>${env.MVN_DEPLOY_USERNAME}</username>
-      <password>${env.MVN_DEPLOY_PASSWORD}</password>
+      <password>wrongpassword</password> <!-- <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
     </server>
     <server>
       <id>sonatype-nexus-staging</id>
       <username>${env.MVN_DEPLOY_USERNAME}</username>
-      <password>${env.MVN_DEPLOY_PASSWORD}</password>
+      <password>wrongpassword</password> <!-- <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
     </server>
   </servers>
   <mirrors/>
