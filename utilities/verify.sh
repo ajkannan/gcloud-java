@@ -1,7 +1,10 @@
 #!/bin/bash
+source ./utilities/test_source.sh
 
 # This script is used by Travis-CI to run tests.
 # This script is referenced in .travis.yml.
+
+echo ${TEST_ENV_VAR_SOURCED}
 
 if [ "${TRAVIS_BRANCH}" == "master" -a "${TRAVIS_PULL_REQUEST}" == "false" ]; then
     # Get signing tools and API keyfile
