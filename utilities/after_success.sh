@@ -30,7 +30,7 @@ if [ "${TRAVIS_JDK_VERSION}" == "oraclejdk7" -a "${TRAVIS_BRANCH}" == "master" -
         #git config --global push.default simple
         #git push --quiet "https://${CI_DEPLOY_USERNAME}:${CI_DEPLOY_PASSWORD}@github.com/GoogleCloudPlatform/gcloud-java.git" > /dev/null 2>&1
 
-        cd ..
+        #cd ..
         #utilities/update_docs_version.sh # Update version in READMEs
         mvn deploy -Dmaven.deploy.skip=true -DskipTests=true --settings target/travis/settings.xml -P sign-deploy
     else
