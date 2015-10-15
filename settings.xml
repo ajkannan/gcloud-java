@@ -35,7 +35,7 @@
       <properties>
         <gpg.homedir>${TRAVIS_BUILD_DIR}/target/travis/signing-tools</gpg.homedir>
         <gpg.keyname>${env.KEYNAME}</gpg.keyname>
-        <gpg.passphrase>wrongpassword</gpg.passphrase> <!-- TODO(ajaykannan): replace this with ${env.SIGN_PASSPHRASE} -->
+        <gpg.passphrase>${env.SIGN_PASSPHRASE}</gpg.passphrase>
       </properties>
     </profile>
   </profiles>
