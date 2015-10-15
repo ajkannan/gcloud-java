@@ -16,37 +16,9 @@
 
 package com.google.gcloud.storage;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import com.google.common.collect.ImmutableList;
 import com.google.gcloud.storage.testing.RemoteGcsHelper;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 public class ITStorageTest {
 
@@ -59,6 +31,7 @@ public class ITStorageTest {
   private static final byte[] BLOB_BYTE_CONTENT = {0xD, 0xE, 0xA, 0xD};
   private static final String BLOB_STRING_CONTENT = "Hello Google Cloud Storage!";
 
+  /*
   @BeforeClass
   public static void beforeClass() {
     gcsHelper = RemoteGcsHelper.create();
@@ -556,5 +529,5 @@ public class ITStorageTest {
     assertEquals(CONTENT_TYPE, updatedBlobs.get(0).contentType());
     assertNull(updatedBlobs.get(1));
     assertTrue(storage.delete(bucket, sourceBlobName1));
-  }
+   * }*/
 }
