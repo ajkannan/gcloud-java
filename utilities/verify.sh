@@ -5,7 +5,7 @@
 
 if [ "${TRAVIS_BRANCH}" == "master" -a "${TRAVIS_PULL_REQUEST}" == "false" ]; then
     # Get signing tools and API keyfile
-    openssl aes-256-cbc -K $encrypted_631490ecae8f_key -iv $encrypted_631490ecae8f_iv -in target/travis/signing-tools.tar.enc -out target/travis/signing-tools.tar -d
+    openssl aes-256-cbc -K $encrypted_b1733412be47_key -iv $encrypted_b1733412be47_iv -in target/travis/signing-tools.tar.enc -out target/travis/signing-tools.tar -d
     mkdir target/travis/signing-tools
     chmod 700 target/travis/signing-tools
     tar xvf target/travis/signing-tools.tar -C target/travis/signing-tools
