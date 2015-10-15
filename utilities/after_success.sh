@@ -23,16 +23,16 @@ if [ "${TRAVIS_JDK_VERSION}" == "oraclejdk7" -a "${TRAVIS_BRANCH}" == "master" -
         sed -i "s/{{SITE_VERSION}}/$SITE_VERSION/g" ${SITE_VERSION}/index.html # Update "Quickstart with Maven" to reflect version change
         git add $SITE_VERSION
         echo "<html><head><meta http-equiv=\"refresh\" content=\"0; URL='http://GoogleCloudPlatform.github.io/gcloud-java/${SITE_VERSION}/index.html'\" /></head><body></body></html>" > index.html
-        git add index.html
+        #git add index.html
         echo "<html><head><script>window.location.replace('/gcloud-java/${SITE_VERSION}/apidocs' + location.search)</script></head><body></body></html>" > apidocs/index.html
-        git add apidocs/index.html
-        git commit -m "Added a new site for version $SITE_VERSION and updated the root directory's redirect."
-        git config --global push.default simple
-        git push --quiet "https://${CI_DEPLOY_USERNAME}:${CI_DEPLOY_PASSWORD}@github.com/GoogleCloudPlatform/gcloud-java.git" > /dev/null 2>&1
+        #git add apidocs/index.html
+        #git commit -m "Added a new site for version $SITE_VERSION and updated the root directory's redirect."
+        #git config --global push.default simple
+        #git push --quiet "https://${CI_DEPLOY_USERNAME}:${CI_DEPLOY_PASSWORD}@github.com/GoogleCloudPlatform/gcloud-java.git" > /dev/null 2>&1
 
         cd ..
-        utilities/update_docs_version.sh # Update version in READMEs
-        mvn deploy -DskipTests=true --settings target/travis/settings.xml -P sign-deploy
+        #utilities/update_docs_version.sh # Update version in READMEs
+        mvn deploy -Dmaven.deploy.skip=true -DskipTests=true --settings target/travis/settings.xml -P sign-deploy
     else
         mvn deploy -DskipTests=true -Dgpg.skip=true --settings target/travis/settings.xml
     fi
