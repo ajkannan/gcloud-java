@@ -16,12 +16,12 @@
     <server>
       <id>sonatype-nexus-snapshots</id>
       <username>${env.MVN_DEPLOY_USERNAME}</username>
-      <password>wrongpassword</password> <!-- <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
+      <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
     </server>
     <server>
       <id>sonatype-nexus-staging</id>
       <username>${env.MVN_DEPLOY_USERNAME}</username>
-      <password>wrongpassword</password> <!-- <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
+      <password>${env.MVN_DEPLOY_PASSWORD}</password> --> TODO(ajaykannan): fix me!
     </server>
   </servers>
   <mirrors/>
