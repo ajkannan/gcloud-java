@@ -21,10 +21,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.google.api.client.extensions.appengine.http.UrlFetchTransport;
+import com.google.api.client.googleapis.compute.ComputeCredential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.common.collect.Iterables;
 import com.google.gcloud.spi.ServiceRpcFactory;
 
@@ -41,6 +44,7 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Objects;
@@ -111,12 +115,22 @@ public abstract class ServiceOptions<
       }
       // Consider Compute
       try {
-        return AuthCredentials.getComputeCredential().getTransport();
+        return getComputeHttpTransport();
       } catch (Exception e) {
         // Maybe not on GCE
       }
       return new NetHttpTransport();
     }
+  }
+
+  private static HttpTransport getComputeHttpTransport()
+      throws IOException, GeneralSecurityException {
+    NetHttpTransport transport = GoogleNetHttpTransport.newTrustedTransport();
+    // Try to connect using Google Compute Engine service account credentials.
+    ComputeCredential credential = new ComputeCredential(transport, new JacksonFactory());
+    // Force token refresh to detect if we are running on Google Compute Engine.
+    credential.refreshToken();
+    return transport;
   }
 
   /**
@@ -342,28 +356,11 @@ public abstract class ServiceOptions<
   }
 
   private static AuthCredentials defaultAuthCredentials() {
-    // Consider App Engine. This will not be needed once issue #21 is fixed.
-    if (appEngineAppId() != null) {
-      try {
-        return AuthCredentials.createForAppEngine();
-      } catch (Exception ignore) {
-        // Maybe not on App Engine
-      }
-    }
-
     try {
       return AuthCredentials.createApplicationDefaults();
     } catch (Exception ex) {
-      // fallback to old-style
+      return AuthCredentials.noCredentials();
     }
-
-    // Consider old-style Compute. This will not be needed once issue #21 is fixed.
-    try {
-      return AuthCredentials.createForComputeEngine();
-    } catch (Exception ignore) {
-      // Maybe not on GCE
-    }
-    return AuthCredentials.noCredentials();
   }
 
   protected static String appEngineAppId() {
@@ -383,6 +380,49 @@ public abstract class ServiceOptions<
   }
 
   protected static String googleCloudProjectId() {
+    File configDir;
+    if (System.getenv().containsKey("CLOUDSDK_CONFIG")) {
+      configDir = new File(System.getenv("CLOUDSDK_CONFIG"));
+    } else if (isWindows() && System.getenv().containsKey("APPDATA")) {
+      configDir = new File(System.getenv("APPDATA"), "gcloud");
+    } else {
+      configDir = new File(System.getProperty("user.home"), ".config/gcloud");
+    }
+    FileReader fileReader = null;
+    try {
+      fileReader = new FileReader(new File(configDir, "configurations/config_default"));
+    } catch (FileNotFoundException newConfigFileNotFoundEx) {
+      try {
+        fileReader = new FileReader(new File(configDir, "properties"));
+      } catch (FileNotFoundException oldConfigFileNotFoundEx) {
+        // ignore
+      }
+    }
+    if (fileReader != null) {
+      try (BufferedReader reader = new BufferedReader(fileReader)) {
+        String line;
+        String section = null;
+        Pattern projectPattern = Pattern.compile("^project\\s*=\\s*(.*)$");
+        Pattern sectionPattern = Pattern.compile("^\\[(.*)\\]$");
+        while ((line = reader.readLine()) != null) {
+          if (line.isEmpty() || line.startsWith(";")) {
+            continue;
+          }
+          line = line.trim();
+          Matcher matcher = sectionPattern.matcher(line);
+          if (matcher.matches()) {
+            section = matcher.group(1);
+          } else if (section == null || section.equals("core")) {
+            matcher = projectPattern.matcher(line);
+            if (matcher.matches()) {
+              return matcher.group(1);
+            }
+          }
+        }
+      } catch (IOException ignore) {
+        // ignore
+      }
+    }
     try {
       URL url = new URL("http://metadata/computeMetadata/v1/project/project-id");
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -394,48 +434,6 @@ public abstract class ServiceOptions<
         }
       }
     } catch (IOException ignore) {
-      // ignore
-    }
-    File configDir;
-    if (System.getenv().containsKey("CLOUDSDK_CONFIG")) {
-      configDir = new File(System.getenv("CLOUDSDK_CONFIG"));
-    } else if (isWindows() && System.getenv().containsKey("APPDATA")) {
-      configDir = new File(System.getenv("APPDATA"), "gcloud");
-    } else {
-      configDir = new File(System.getProperty("user.home"), ".config/gcloud");
-    }
-    FileReader fileReader;
-    try {
-      fileReader = new FileReader(new File(configDir, "configurations/config_default"));
-    } catch (FileNotFoundException newConfigFileNotFoundEx) {
-      try {
-        fileReader = new FileReader(new File(configDir, "properties"));
-      } catch (FileNotFoundException oldConfigFileNotFoundEx) {
-        // return null if we can't find config file
-        return null;
-      }
-    }
-    try (BufferedReader reader = new BufferedReader(fileReader)) {
-      String line;
-      String section = null;
-      Pattern projectPattern = Pattern.compile("^project\\s*=\\s*(.*)$");
-      Pattern sectionPattern = Pattern.compile("^\\[(.*)\\]$");
-      while ((line = reader.readLine()) != null) {
-        if (line.isEmpty() || line.startsWith(";")) {
-          continue;
-        }
-        line = line.trim();
-        Matcher matcher = sectionPattern.matcher(line);
-        if (matcher.matches()) {
-          section = matcher.group(1);
-        } else if (section == null || section.equals("core")) {
-          matcher = projectPattern.matcher(line);
-          if (matcher.matches()) {
-            return matcher.group(1);
-          }
-        }
-      }
-    } catch (IOException ex) {
       // ignore
     }
     // return null if can't determine
