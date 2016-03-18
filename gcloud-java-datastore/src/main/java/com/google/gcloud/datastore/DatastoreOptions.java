@@ -23,12 +23,12 @@ import com.google.api.services.datastore.DatastoreV1.EntityResult;
 import com.google.api.services.datastore.DatastoreV1.LookupResponse;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
+import com.google.gcloud.AppEngineHelper;
 import com.google.gcloud.ServiceOptions;
 import com.google.gcloud.datastore.spi.DatastoreRpc;
 import com.google.gcloud.datastore.spi.DatastoreRpcFactory;
 import com.google.gcloud.datastore.spi.DefaultDatastoreRpc;
 
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
@@ -176,15 +176,7 @@ public class DatastoreOptions extends ServiceOptions<Datastore, DatastoreRpc, Da
   }
 
   private static String defaultNamespace() {
-    try {
-      Class<?> clazz = Class.forName("com.google.appengine.api.NamespaceManager");
-      Method method = clazz.getMethod("get");
-      String namespace = (String) method.invoke(null);
-      return namespace == null || namespace.isEmpty() ? null : namespace;
-    } catch (Exception ignore) {
-      // return null (Datastore default namespace) if could not automatically determine
-      return null;
-    }
+    return AppEngineHelper.defaultNamespace();
   }
 
   public boolean force() {

@@ -25,7 +25,6 @@ import com.google.auth.oauth2.ServiceAccountCredentials;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.security.PrivateKey;
 import java.util.Collection;
 import java.util.Objects;
@@ -42,51 +41,25 @@ public abstract class AuthCredentials implements Restorable<AuthCredentials> {
 
     private static class AppEngineCredentials extends GoogleCredentials {
 
-      private final Object appIdentityService;
-      private final Method getAccessToken;
-      private final Method getAccessTokenResult;
       private final Collection<String> scopes;
 
       AppEngineCredentials() {
-        try {
-          Class<?> factoryClass =
-              Class.forName("com.google.appengine.api.appidentity.AppIdentityServiceFactory");
-          Method method = factoryClass.getMethod("getAppIdentityService");
-          this.appIdentityService = method.invoke(null);
-          Class<?> serviceClass =
-              Class.forName("com.google.appengine.api.appidentity.AppIdentityService");
-          Class<?> tokenResultClass = Class.forName(
-              "com.google.appengine.api.appidentity.AppIdentityService$GetAccessTokenResult");
-          this.getAccessTokenResult = serviceClass.getMethod("getAccessToken", Iterable.class);
-          this.getAccessToken = tokenResultClass.getMethod("getAccessToken");
-          this.scopes = null;
-        } catch (Exception e) {
-          throw new RuntimeException("Could not create AppEngineCredentials.", e);
-        }
+        scopes = null;
       }
 
       AppEngineCredentials(Collection<String> scopes, AppEngineCredentials unscoped) {
-        this.appIdentityService = unscoped.appIdentityService;
-        this.getAccessToken = unscoped.getAccessToken;
-        this.getAccessTokenResult = unscoped.getAccessTokenResult;
         this.scopes = scopes;
       }
 
       /**
-       * Refresh the access token by getting it from the App Identity service
+       * Refresh the access token by getting it from the App Identity service.
        */
       @Override
       public AccessToken refreshAccessToken() throws IOException {
         if (createScopedRequired()) {
           throw new IOException("AppEngineCredentials requires createScoped call before use.");
         }
-        try {
-          Object accessTokenResult = getAccessTokenResult.invoke(appIdentityService, scopes);
-          String accessToken = (String) getAccessToken.invoke(accessTokenResult);
-          return new AccessToken(accessToken, null);
-        } catch (Exception e) {
-          throw new IOException("Could not get the access token.", e);
-        }
+        return AppEngineHelper.refreshAccessToken(scopes);
       }
 
       @Override

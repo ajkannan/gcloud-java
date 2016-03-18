@@ -39,7 +39,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
@@ -447,21 +446,7 @@ public abstract class ServiceOptions<ServiceT extends Service<OptionsT>, Service
   }
 
   protected static String getAppEngineProjectId() {
-    try {
-      Class<?> factoryClass =
-          Class.forName("com.google.appengine.api.appidentity.AppIdentityServiceFactory");
-      Class<?> serviceClass =
-          Class.forName("com.google.appengine.api.appidentity.AppIdentityService");
-      Method method = factoryClass.getMethod("getAppIdentityService");
-      Object appIdentityService = method.invoke(null);
-      method = serviceClass.getMethod("getServiceAccountName");
-      String serviceAccountName = (String) method.invoke(appIdentityService);
-      int indexOfAtSign = serviceAccountName.indexOf('@');
-      return serviceAccountName.substring(0, indexOfAtSign);
-    } catch (Exception ignore) {
-      // return null if can't determine
-      return null;
-    }
+    return AppEngineHelper.getProjectId();
   }
 
   @SuppressWarnings("unchecked")
